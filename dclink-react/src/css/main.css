@@ -1,0 +1,391 @@
+
+html, body {
+	height: 100%;
+}
+
+
+body { 
+	padding-right: 0 !important ;
+	overflow-x: hidden
+}
+
+
+.modal {
+    padding-right: 0px !important;
+}
+
+.modal-dialog{
+	
+}
+
+.modal-backdrop.show, .modal{
+	
+}
+
+.modal-body a { 
+	color:grey;
+}
+
+#root { height: 100% }
+
+.navbar{
+	padding-right:13px !important;
+}
+.wrapper {
+	min-height: 100%;
+	height: auto !important;
+	height: 100%;
+	/* Negative indent footer by it's height */
+	margin: 0 auto -50px;
+	overflow: hidden;
+}
+
+/* Set the fixed height of the footer here */
+.push, .footer {
+	height: 50px;
+}
+
+.footer {
+	background-color: #f5f5f5;
+}
+
+.provincial .nav-link {
+	padding-right: 3rem;
+}
+/* Lastly, apply responsive CSS fixes as necessary */
+@media ( max-width : 768px) {
+	.footer {
+		margin-left: -20px; 
+		margin-right: -20px;
+		padding-left: 20px;
+		padding-right: 20px;
+	}
+}
+
+.card {
+	border-color: silver;
+	border: 0px;
+	border-left: 3px solid;
+	margin-left: 20px;
+	min-width: 210px;
+	margin-bottom: 0.5rem;
+	padding-left:0px;
+	padding-right:0px;
+}
+
+.card-header {
+	padding: 0.55rem 1.25rem;
+	border-top: 1px solid rgba(0, 0, 0, 0.125);
+	border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+	border-right: 1px solid rgba(0, 0, 0, 0.125);
+	white-space: nowrap;
+	height:44px;
+
+}
+
+.card-body {
+	padding: 0.55rem 1.25rem;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+	border-right: 1px solid rgba(0, 0, 0, 0.125);
+	font-size: 0.8rem
+}
+
+.inspection-tab .card{
+	min-width:287px;
+	margin-left:0px;
+	border:1px solid rgba(0, 0, 0, 0.125);
+	padding:0px;
+}
+
+.inspection-tab .card-text{
+	
+}
+
+.inspection-tab .card-header{
+	border:0px;
+	border-bottom:1px solid rgba(0, 0, 0, 0.125);
+	padding-left:15px;	    
+}
+
+.inspection-name{
+	width: calc(100% - 55px);
+    display: inline-block;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    top: 5px;
+    position: relative;
+    margin-left: 5px;
+    white-space:nowrap;
+}
+
+.badge {
+	white-space: normal;
+}
+
+.modal-open .navbar-toggler {
+	margin-right: 0px;
+}
+
+.map {
+	top: 5px;
+	position: relative;
+}
+
+h6 div {
+	display: table-cell;
+	vertical-align: middle;
+}
+
+.popover {
+	max-width: 100%;
+	/* Max Width of the popover (depending on the container!) */
+}
+
+.champ {
+	padding-left: 8px;
+}
+
+.nchamp {
+	margin-left: -2px;
+}
+
+.mchamp {
+	padding-left: 16px;
+}
+
+.rate {
+	width: calc(100% - 35px) !important;
+}
+
+.item {
+	margin-bottom: 10px;
+}
+
+.item:hover .bar, .item:hover .pin {
+	opacity: 1;
+}
+
+.show .bar {
+	opacity: 1;
+}
+
+.bar {
+	opacity: 0;
+	width:calc(100% - 5px);
+	height: 6px;
+	margin-left: 5px;
+	margin-bottom: 6px;
+}
+
+
+.bar div{
+	top:-10px;	
+}
+
+.member div{
+	top:-5px;	
+	
+}
+
+.pin {
+	opacity: 0;
+	float: right;
+	position: relative;
+}
+
+.title {
+	display: inline-block;
+	position: relative;
+}
+
+.inspection a { 
+	color: #373a3c;
+	color: grey;
+	text-decoration: none;
+}
+
+.inspection:hover a { 
+	color: silver;
+}
+
+.inspection .glyphicon-headphones {
+	display: none;
+}
+
+.inspection .item {
+	display: inline-block;
+}
+
+.inspection-tab  {
+	width:100%;
+	padding-right:20px;
+}
+
+
+.member {
+	line-height: 12px;
+}
+
+.member:hover {
+	text-shadow: 0px 0px 3px grey;
+}
+
+.tooltip {
+	opacity: 1;
+	padding:0px;
+	color:'white';
+}
+
+.tooltip-inner {
+	background-color: rgba(0, 0, 0, 0.7);
+	white-space: nowrap;
+	max-width:300px;
+}
+
+.tooltip .arrow{
+	display:none;
+}
+
+.small {
+	font-size: 80%;
+}
+
+.header {
+	padding-left: 10px;
+	border-top: none;
+	border-right: none;
+	border-left: none;
+	padding-bottom: 5px;
+}
+
+a.member {
+	text-decoration: none;
+}
+
+.no-margin {
+	margin-bottom: 0px;
+}
+
+.jumbotron {
+	padding: 10px;
+}
+
+
+.link{
+	color:#2780E3;
+	cursor:pointer;	
+	padding:0;
+	position: relative;
+    top: -1px;
+}
+
+.link:hover{
+	text-decoration: underline;
+}
+
+.col{
+	-webkit-box-flex: 1;
+}
+
+.row{
+	-webkit-box-flex: 0;
+}
+
+
+.spinner-border {
+    display: inline-block;
+    width: 2rem;
+    height: 2rem;
+    vertical-align: text-bottom;
+    border: .25em solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    -webkit-animation: spinner-border .75s linear infinite;
+    animation: spinner-border .75s linear infinite;
+}
+
+
+.spinner-border-sm {
+    width: 1rem;
+    height: 1rem;
+    border-width: .2em;
+}
+
+
+@keyframes spinner-border {
+  from{
+  	transform:rotate(0deg)
+  }
+  to{
+  	transform:rotate(360deg)
+  }
+}
+
+.awards{
+	position:relative;
+	top:70px;
+}
+
+.member-chart{
+	display: flex;
+}
+
+@media (max-width:625px){
+	.column{
+		width:100% !important;
+	}
+	
+	.column .nav-item{
+		display:inline-block;
+	}
+	
+	.member-chart{
+		display: block;
+	}
+	
+}
+.inspection-tab .nav-item{
+	width:300px;
+}
+
+
+
+@media ( max-width : 768px) {
+	.inspection-tab .column{
+		width:100% !important;
+	}
+}
+
+@media ( max-width : 616px) {
+	.inspection-tab .column{
+		width:100% !important;
+	}
+	
+	.inspection-tab .nav-item{
+		width:100%;
+	}
+	
+}
+
+.election-name{
+	max-width: calc(100% - 133px);
+    display: inline-block;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    padding:0;
+
+    color: grey;
+
+}
+
+
+
+small .link{
+	 font-size: 125%;
+    font-weight: 400;
+}
+
+.presidential .card{
+	width:210px;
+}
