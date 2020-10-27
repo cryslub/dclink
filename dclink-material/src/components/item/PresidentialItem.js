@@ -36,11 +36,11 @@ export default class PresidentialItem extends Item {
 			<DataContext.Consumer>
 			{data=>(
 				<>{
-				item.type === '당선' && state.showResult!=='min'?
+				item.type === '당선'?
 					<StarIcon style={{color:'gold'}}/>
 				:null
 				}
-					<Box mr={1} component="span"><Typography  variant={state.showResult==='min'?'body1':'h6'} component="span">{item.personName}</Typography></Box>
+					<Box mr={1} component="span"><Typography  variant={'h6'} component="span">{item.personName}</Typography></Box>
 					<Box mr={1} component="span">{item.party!==0?this.party(item.party):null}</Box>
 					{item.history>1?<Tooltip title={<>{item.photo==1?<PersonAvatar id={item.person}/>:null}인물이력</>}>
 						<IconButton aria-label="settings"  onClick={()=>data.history(item.person)}>
@@ -64,20 +64,7 @@ export default class PresidentialItem extends Item {
 		{state=>(
 			<DataContext.Consumer>
 			{data=>(
-				state.showResult==='min'?
-					candidate.subs.map((sub,i)=>{
-						if(sub.link==='') return null
-						return <Grid item>
-							<Tooltip title="듣기">
-								<Chip label={sub.txt}  size="small"  variant="outlined"
-									icon={<YouTubeIcon />}
-						    		onClick={()=>Util.link(sub.link)}>
-								
-								</Chip>
-							</Tooltip>
-						</Grid>
-					})
-				:state.showResult==='full'?<>
+				<>
 					<Divider/>
 	
 					<CardContent >
@@ -98,7 +85,7 @@ export default class PresidentialItem extends Item {
 						</Grid>
 					</CardContent >
 					</>
-					:null
+					
 			)}
 		    </DataContext.Consumer>			
 		)}
@@ -119,21 +106,6 @@ export default class PresidentialItem extends Item {
 		{state=>(
 			<DataContext.Consumer>
 		    {data=>(
-		    		state.showResult==='min'?
-		    			<>
-		    			<Grid item>
-		    				<Tooltip title="듣기">
-		    					<Chip label={candidate.txt}  size="small"  icon={<YouTubeIcon style={{'color':data.parties[candidate.party].textColor}}/>}
-				 					style={{'color':data.parties[candidate.party].textColor,'backgroundColor': data.parties[candidate.party].color}}
-						    		onClick={()=>Util.link(candidate.link)}>
-						    	</Chip>
-						    </Tooltip>
-		    			</Grid>
-		    			{candidate.subs.length>0&&candidate.subs[0].link!==''?<NavigateNextIcon/>:null}
-		    			 {this.body(candidate)}
-			    		
-			    		</>
-		    		:
 		    		
 					    <PersonCard candidate={candidate} type="presidential" style={{margin:'10px'}}>
 					    	{this.body(candidate)}

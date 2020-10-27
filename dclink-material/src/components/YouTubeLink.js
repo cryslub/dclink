@@ -14,8 +14,8 @@ export default class YouTubeLink extends Component {
 		const color = this.props.color;
 		
 		return <Tooltip title="듣기">
-			<IconButton aria-label="settings" color={color} onClick={()=>Util.link(link)}>
-				<YouTubeIcon fontSize="small"/>
+			<IconButton aria-label="settings"  onClick={()=>Util.link(link)}>
+				<YouTubeIcon fontSize="small" style={{color:color}}/>
 			</IconButton>
 		</Tooltip>
 	}

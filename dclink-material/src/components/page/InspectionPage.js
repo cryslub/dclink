@@ -1,7 +1,5 @@
 import React from 'react';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Card from 'react-bootstrap/Card';
+
 
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
@@ -145,57 +143,7 @@ export default class InspectionPage extends ProvincialPage {
 	
 	
 	smallView(items){
-		const stateMap = this.state.stateMap;
-	
-		
-		if(stateMap===undefined) return null;
-		return <Row className="m-3 mb-4 inspection-tab">
-		{
-			Object.keys(stateMap).map((key,i)=>{
-				const state = stateMap[key];
-				
-				const section = this.makeSections(state.items)
-				var count=0;
-				return <Card   key={i}  className="mb-3 mr-2 col col-sm-1">
-							
-						<Card.Header className="bg-dark" style={{color:'white'}}>
-							{state.name} 
-							<small className="mr-1 pl-1"><a href={section.overview.link}  target="youtube" style={{color:'#eeeeee'}}>듣기 </a></small>
-						</Card.Header>
-						<Card.Text className="p-2 pb-3">
-						{
-							state.items.map((item,i)=>{
-								if(item.name==='' ||item.name==='소속위원' || item.type==='오버뷰') return null
-								
-								var glyphicon = 'glyphicon-book'
-								var color = '#2780E3'
-								if(item.type==='장면' || item.type==='피폭'){
-									glyphicon = 'glyphicon-alert'
-									color = '#FF0039'
-								}else if(item.type==='파이날'){
-									glyphicon = 'glyphicon-tower'								
-									color = 'gold'
-								}
-								count++
-								return<div>
-									
-						    		<span className={'glyphicon '+glyphicon} style={{color:color}}></span>
-						    			<div className="inspection-name" title={item.name}>
-						    				{item.name}
-						    			</div>
-							    	<a  className="m-1" href={item.link} target="youtube"><small >듣기</small></a>
-							    	{count===section.issues.length || (count===section.issues.length+section.scenes.length&&section.final.length>0)?<hr/>:null}
-								 </div>
-								    
-							})						
-						}
-						</Card.Text>
-			    		
-				    </Card>
-					
-			})
-		}
-		</Row>
+		return null;
 	}
 	
 	render() {

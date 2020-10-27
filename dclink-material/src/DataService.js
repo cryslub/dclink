@@ -1,7 +1,7 @@
 import { isAndroid } from "react-device-detect";
 
-//const host =  "http://cryslub.cafe24app.com/dclink/";
-const host = "";
+const host =  "http://cryslub.cafe24app.com/dclink/";
+//const host = "";
 
 
 const getData = async (url) => {

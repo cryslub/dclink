@@ -52,10 +52,13 @@ const useStyles = (theme) => ({
     height:'88px'
   },
   listAvatar:{
-	  minWidth:'25px'
+	  minWidth:'25px',
+	  marginLeft:'10px',
+	  marginRight:'5px'
   },
  item:{
-	 paddingLeft:0
+	 paddingLeft:0,
+	 borderRadius:4
  },
  listItem:{
 	 paddingLeft:'5px'
@@ -262,20 +265,21 @@ class Person extends Component {
 					
 
 					return <Grid item>
-						<ListItem className={classes.item}>
-							<ListItemAvatar className={classes.listAvatar}>
-								<Tooltip title="듣기">
-									<IconButton aria-label="settings" onClick={()=>Util.link(item.link)} >
-									{icon}
-									</IconButton>
-								</Tooltip >
-							</ListItemAvatar>
-							<ListItemText primary= {item.txt==='MVP'?item.txt:item.name} 
-								secondary={<>
-								{item.department+" "+item.date.substring(0,4)}
-								</>}/>
+						<Tooltip title="듣기">						
+							<ListItem button className={classes.item} >
+								<ListItemAvatar className={classes.listAvatar}>
+										{icon}
+								</ListItemAvatar>
+								<ListItemText
+									onClick={()=>Util.link(item.link)}
+									primary= {item.txt==='MVP'?item.txt:item.name} 
+									secondary={<>
+									{item.department+" "+item.date.substring(0,4)}
+									</>}/>
+	
+							</ListItem>
+						</Tooltip >
 
-						</ListItem>
 					</Grid>
 		
 	

@@ -29,13 +29,10 @@ export default class PresidentialPage extends Page {
 						})}
 				  	</Grid>
 				  	<Hidden xsDown implementation="css">
-				  	{state.showResult!=='min'?
 		  				<Box height='100%'>
 							<small>득표</small>
 							<LongBar data={data} items={items} type="person"/>
 						</Box>
-						:null
-				  	}
 				  	</Hidden>
 		  		</Grid>
 		   	 )}

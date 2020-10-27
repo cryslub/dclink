@@ -10,6 +10,8 @@ import Item from './Item.js';
 import Party from '../Party.js';
 import PersonIcon from '../PersonIcon.js';
 import Candidate from '../Candidate.js';
+import SmallPersonCard from '../SmallPersonCard.js';
+
 
 
 import {DataContext} from '../../DataContext.js';
@@ -53,7 +55,7 @@ export default class ProportionItem extends Item {
 				<Grid item>
 				{
 					state.showResult==='min'?							
-						<PersonIcon member={candidate} link={candidate.link}/>
+						<SmallPersonCard candidate={candidate}/>
 					:<Candidate candidate={candidate} key={i}/>
 				}
 				</Grid>
