@@ -340,8 +340,9 @@ class ProvincialItem extends Item {
 	
 	
 	extra(item){
-		
-    	return <ExtraCharts item = {item}/>
+		if(item.type=='기초' ||item.type=='광역' )
+			return <ExtraCharts item = {item}/>
+		return null;
 	}
 	
 }

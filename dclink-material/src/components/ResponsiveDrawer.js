@@ -144,10 +144,10 @@ function ResponsiveDrawer(props) {
 			        	className={classes.toggleButton}				
 			     >
 			        <ToggleButton value="full" aria-label="left aligned">
-			        	<WebIcon/><Box style={{position:'relative',top:'1px',paddingLeft:'1px'}}>전체보기</Box>
+			        	<Box style={{position:'relative',top:'1px',paddingLeft:'1px'}}>전체보기</Box>
 			        </ToggleButton>
 			        <ToggleButton value="min" aria-label="right aligned">
-			         	<WebAssetIcon/><Box style={{position:'relative',top:'1px',paddingLeft:'1px'}}>간략히</Box>
+			         	<Box style={{position:'relative',top:'1px',paddingLeft:'1px'}}>간략히</Box>
 			        </ToggleButton>
 			     </ToggleButtonGroup>
 		     </Box>
