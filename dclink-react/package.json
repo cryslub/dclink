@@ -15,7 +15,7 @@
     "@testing-library/user-event": "^7.2.1",
     "echarts": "^4.7.0",
     "echarts-for-react": "^2.0.15-beta.1",
-    "highcharts": "^6.2.0",
+    "highcharts": "^9.0.0",
     "highcharts-react-official": "^3.0.0",
     "lodash": "^4.17.15",
     "nivo": "^0.31.0",
