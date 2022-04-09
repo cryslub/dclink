@@ -30,6 +30,8 @@ import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
 import HowToVoteIcon from '@material-ui/icons/HowToVote';
 import MapIcon from '@material-ui/icons/Map';
 import BookIcon from '@material-ui/icons/Book';
+
+
 import AssessmentIcon from '@material-ui/icons/Assessment';
 import PieChartIcon from '@material-ui/icons/PieChart';
 import FaceIcon from '@material-ui/icons/Face';
@@ -43,6 +45,7 @@ import WebAssetIcon from '@material-ui/icons/WebAsset';
 
 import Header from './Header.js';
 
+import ContentsDrawer from './ContentsDrawer.js';
 
 
 const drawerWidth = 300;
@@ -101,7 +104,8 @@ function ResponsiveDrawer(props) {
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [open, setOpen] = React.useState([])
   
-
+  const [contentsOpen, setContentsOpen] = React.useState(false)
+  
   
   
   const handleDrawerToggle = (open) => {
@@ -224,13 +228,17 @@ function ResponsiveDrawer(props) {
   }
 	
 
+  const toggleContents = (open)=>{
+    setContentsOpen(open)
+  }
+
   
   const container = window !== undefined ? () => window().document.body : undefined;
 
   return (
     <div className={classes.root}>
       <CssBaseline />
-      <Header toggleElections={toggleElections} search={props.search}/>
+      <Header toggleElections={toggleElections} toggleContents={toggleContents} search={props.search} />
       <nav className={classes.drawer} aria-label="mailbox folders">
         {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
         <Hidden mdUp >
@@ -261,6 +269,9 @@ function ResponsiveDrawer(props) {
             {drawer}
           </Drawer>
         </Hidden>
+
+        
+					<ContentsDrawer open={contentsOpen} toggleContents={toggleContents}/>
       </nav>
       <main className={classes.content}>
         <div className={classes.toolbar} />

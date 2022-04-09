@@ -1,9 +1,7 @@
 import { isAndroid } from "react-device-detect";
 
-const host =  "/dclink/";
-
+const host =  "";
 //const host = "http://localhost:8001/dclink/";
-//const host =  "http://localhost:8080/dclink/";
 
 
 const getData = async (url) => {
@@ -25,7 +23,7 @@ const getData = async (url) => {
 
 	 getParty :  async () =>{
 		 			
-		  const res = await  fetch(host+"data/parties.do")
+		  const res = await  fetch(host+"data/party")
 		   
 		  return res.json();		    	
 			
@@ -34,7 +32,7 @@ const getData = async (url) => {
 		 
 		  
 			
-		  const res = await  fetch(host+"data/party/subs.do")
+		  const res = await  fetch(host+"data/party/sub")
 		   
 		  return res.json();		    	
 			
@@ -44,7 +42,7 @@ const getData = async (url) => {
 			 
 			  
 			
-		  const res = await  fetch(host+"data/zones.do")
+		  const res = await  fetch(host+"data/zone")
 		   
 		  return res.json();		    	
 			
@@ -53,7 +51,7 @@ const getData = async (url) => {
 	 getElection :  async () =>{
 		 
 		  
-		 	return getData("data/elections.do");
+		 	return getData("data/election");
 		     	
 			
 		},
@@ -70,7 +68,7 @@ const getData = async (url) => {
 	 getAllState :  async (election) =>{
 		 
 			
-		  const res = await  fetch(host+"data/states.do")
+		  const res = await  fetch(host+"data/state")
 		   
 		  return res.json();		    	
 			
@@ -114,7 +112,7 @@ const getData = async (url) => {
 	search :  async (name) =>{
 		 
 		
-		  const res = await  fetch(host+"data/search.do?name="+name)
+		  const res = await  fetch(host+"data/search/name/"+name)
 		   
 		  return res.json();		    	
 			

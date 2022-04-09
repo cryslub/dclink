@@ -196,11 +196,15 @@ export default class ProvincialPage extends Page {
 				  			
 				  			const item = items[keyName];
 				  			
+							  const ref = React.createRef();
+							if(data.items[keyName]!=undefined)
+								data.items[keyName].ref = ref;
+								
 				  			if(item.name==='' && item.title===''&& item.party==0) return null;
 				  			
-				  			if(currentState.name==='비례') return 	<ProportionItem item={item} key={keyIndex} index={keyIndex}/>
+				  			if(currentState.name==='비례') return 	<ProportionItem item={item} key={keyIndex} index={keyIndex} ref={ref}/>
 				  			else if(currentState.name==='통계') return 	<StaticsItem item={item} key={keyIndex} statics={self.state.statics} context={data}/>
-				  			else return 	<ProvincialItem item={item} key={keyIndex} index={keyIndex}/>
+				  			else return 	<ProvincialItem item={item} key={keyIndex} index={keyIndex} currentElection={self.props.currentElection} ref={ref}/>
 						})}
 		  			</Grid>
 		  			<Hidden xsDown implementation="css">

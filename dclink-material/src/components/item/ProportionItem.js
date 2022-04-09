@@ -17,6 +17,7 @@ import SmallPersonCard from '../SmallPersonCard.js';
 import {DataContext} from '../../DataContext.js';
 import {MainContext} from '../../MainContext.js';
 
+import Logo from '../Logo.js'
 
 
 export default class ProportionItem extends Item {
@@ -25,6 +26,9 @@ export default class ProportionItem extends Item {
 		return <MainContext.Consumer>
 		{state=>(
 			<>
+			<Box mr={1} component="span">
+				<Logo candidate={item} classes={{}} size="small"/>
+			</Box>
 			{item.name!==''?<Box mr={1}><Typography  variant={state.showResult==='min'?'body1':'h6'} component="span">{item.name}</Typography></Box>:null}
 		  	{item.party!==0?this.party(item.party):null}
 		  	</>

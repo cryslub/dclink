@@ -56,7 +56,7 @@ export default class Item extends Component {
 					state.showResult==='min'?<>
 						
 						<Box mb={2}>
-							<Grid container spacing={1}>
+							<Grid container spacing={1} alignItems="center">
 						  	{
 						  		item.candidates !==undefined ?
 						  		item.candidates.map((candidate,i)=>{

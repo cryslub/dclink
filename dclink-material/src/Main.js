@@ -6,6 +6,8 @@ import { withStyles } from '@material-ui/core/styles';
 import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
+
+
 import {
 	  BrowserRouter as Router,
 	  Switch,
@@ -14,9 +16,14 @@ import {
 
 import ResponsiveDrawer from './components/ResponsiveDrawer.js';
 
+
+
 import Middle from './components/Middle.js';
 import PersonModal from './components/dialog/PersonModal.js';
+import YoutubeModal from './components/dialog/YoutubeModal.js';
+
 import ZoneModal from './components/dialog/ZoneModal.js';
+
 import SearchDialog from './components/dialog/SearchDialog.js';
 
 
@@ -30,6 +37,7 @@ import Util from './Util.js';
 
 
 import DataService from './DataService.js';
+
 
 const useStyles = (theme) => ({
 
@@ -53,7 +61,8 @@ class Main extends Component {
 					person:false,
 					zone:false,
 					loading:false,
-					search:false
+					search:false,
+					youtube:false
 				},
 				showResult:'full',
 				loading:true,
@@ -69,11 +78,16 @@ class Main extends Component {
 		this.middle = React.createRef();
 		this.person = React.createRef();
 		this.zone = React.createRef();
+		this.youtube = React.createRef();
 
 		this.data = {
 				history:this.history,
 				zoneHistory:this.zoneHistory,
-				setLoading:this.setLoading
+				setLoading:this.setLoading,
+				play:this.play,
+				items:{},
+				currentElection:{},
+				currentState:{}
 		};
 	}
 	
@@ -92,6 +106,8 @@ class Main extends Component {
 		
 		this.toggleElections(false);
 
+		this.data.currentElection = election
+		this.data.currentState = election.states[0]
 	}
 	
 	
@@ -176,6 +192,19 @@ class Main extends Component {
 		this.setState({modal:{person:true}})
 	}
 
+	play = (link)=>{
+		if(link =='') return
+
+		if(link!='open')
+			this.youtube.current.play(link)
+		this.setState({modal:{youtube:true}})
+
+	}
+
+	contents = (items) =>{
+
+	}
+
 	zoneHistory = (zone)=>{
 		this.setState({modal:{zone:true}})
 		this.zone.current.history(zone)
@@ -207,7 +236,12 @@ class Main extends Component {
 	selectState = (election,state) =>{
 		this.selectElection(election)
 		
+		if(this.state.currentState == state){
+			this.setLoading(false);
+		}
 		this.setState({currentState:state})
+		this.data.currentState = state
+
 	}
 	
 	
@@ -223,15 +257,18 @@ class Main extends Component {
 					    showResult={this.state.showResult} search={this.search} selectState={this.selectState}
 				    	changeShowResult={this.showResult}
 				    >
-				    	
+				 
 				   
 			        	<Middle  currentElection={this.state.currentElection} currentState={this.state.currentState} ref={this.middle} />	  		
 					
 				        
 			        </ResponsiveDrawer>
+
 			        
 			        <SearchDialog open={this.state.modal.search} close={()=>this.closeModal('search')}/>
 			        <PersonModal open={this.state.modal.person} close={()=>this.closeModal('person')} ref={this.person}/>
+			        <YoutubeModal open={this.state.modal.youtube} close={()=>this.closeModal('youtube')} ref={this.youtube}/>
+
 			        <DataContext.Consumer>
 			    	{data=>(
 			    		<ZoneModal open={this.state.modal.zone} close={()=>this.closeModal('zone')} ref={this.zone}  data={data}/>

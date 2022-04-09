@@ -95,7 +95,7 @@ class StaticsItem extends Item {
 		 
 		 var max = 0;
 		 rates[party].forEach(function(rate){
-			 if(max < rate.rate / rate.total){ max = rate.rate / rate.total;}
+			 if(max < rate.rate / rate.totalRate){ max = rate.rate / rate.totalRate;}
 		 });
 		
 		 var layoutCenter = null;
@@ -104,11 +104,13 @@ class StaticsItem extends Item {
 		
 		rates[party].forEach(function(rate){
 			
-			var r= rate.rate / rate.total;
+			var r= rate.rate / rate.totalRate;
 			var code = rate.code;
 			data.push({
 				name:code,
 				value :r,
+				totalRate:rate.totalRate,
+				rate:rate.rate,
 				txt : rate.txt,
 				link: rate.link,
 				photo:rate.photo,
@@ -201,8 +203,8 @@ class StaticsItem extends Item {
         	    position:'top',
         	    backgroundColor:'rgba(0, 0, 0, 0.5)',
   	            formatter:  function (params, ticket, callback) {
-  	            	if(params.data.value ===0) return params.data.region+' 데이터 없음'
-      	        	var value = (params.data.value*100).toFixed(2);
+  	            	if(params.data.value ===0) return '데이터 없음'
+      	        	var value = (params.data.rate*100/params.data.totalRate).toFixed(2);
       	        	
       	        	if(params.data.person !== 0 && params.data.photo === 1){
             	            return "<img src='http://cryslub1.cafe24.com/dclink/portrait/"+params.data.person+".jpg' style='width:30px;height:40px;margin-right:5px;position:relative;top:2px'/><span >"+params.data.txt+" ("+ value +"%)</span>";
@@ -293,7 +295,7 @@ class StaticsItem extends Item {
 		
 		 var max = 0;
 		 rates[party].forEach(function(rate){
-			 if(max < rate.rate / rate.total){ max = rate.rate / rate.total;}
+			 if(max < rate.rate / rate.totalRate){ max = rate.rate / rate.totalRate;}
 		 });
 
 		 
@@ -322,7 +324,7 @@ class StaticsItem extends Item {
 		const width = size.width;
 		
 		rates[party].forEach(function(rate){
-			var r= rate.rate / rate.total;
+			var r= rate.rate / rate.totalRate;
 
 			var a =r/max;
 			if(a<0.2) a= 0.2;
@@ -397,8 +399,7 @@ class StaticsItem extends Item {
 		        	fontSize:'11px'
 		        },
 		        formatter:function(){
-		        	if(this.point.v===0) return this.point.region+" 후보 없음"
-		        	
+		        	if(this.point.v===0) return "후보 없음"
 		        	
 		        	if(this.point.photo === 1){
 			        	return "<img src='http://cryslub1.cafe24.com/dclink/portrait/"+this.point.person+".jpg' style='width:30px;height:40px;margin-right:5px;'/>"+this.point.txt + " (" +this.point.v+"%)";

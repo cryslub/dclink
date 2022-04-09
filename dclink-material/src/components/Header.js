@@ -7,8 +7,15 @@ import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
+
+import YouTubeIcon from '@material-ui/icons/YouTube';
+import ListIcon from '@material-ui/icons/List';
+
 import Link from '@material-ui/core/Link';
 import Tooltip from '@material-ui/core/Tooltip';
+import Hidden from '@material-ui/core/Hidden';
+import Box from '@material-ui/core/Box';
+
 
 
 import useScrollTrigger from '@material-ui/core/useScrollTrigger';
@@ -18,6 +25,10 @@ import PropTypes from 'prop-types';
 
 import DataService from '../DataService.js';
 import Util from '../Util.js';
+
+
+import {DataContext} from '../DataContext.js';
+
 
 const drawerWidth = 300;
 const useStyles = (theme) => ({
@@ -39,7 +50,6 @@ const useStyles = (theme) => ({
 	      },
 	  title: {
 	    flexGrow: 1,
-	    display: 'none',
 	    [theme.breakpoints.up('md')]: {
 	      display: 'block',
 	    },
@@ -178,7 +188,9 @@ class Header extends Component {
 		
 		 const { classes } = this.props;
 		
-	    return  <div className={classes.root}>
+	    return  <DataContext.Consumer>
+	    {data=>(
+			<div className={classes.root}>
 	 
 	    	<HideOnScroll>
 			    <AppBar position="fixed" className={classes.appBar} elevation={0}>
@@ -188,17 +200,41 @@ class Header extends Component {
 				      </IconButton>
 				      <Typography variant="h6" className={classes.title}>
 				      <Link href="http://xsfm.co.kr/" target="xsfm" color="inherit" className={classes.brand}>
-				      	XSFM 그것은 알기 싫다 <small> 데이터 센트럴 조감도 </small>
+						  <Hidden smUp >
+							  <Typography  variant="h6" component="div" style={{position: 'relative',top: 5,display:'block'}}>
+								XSFM 그것은 알기 싫다
+								</Typography>
+								<Typography  variant="subtitle1"   component="div">
+								데이터 센트럴 조감도
+								</Typography>
+								
+						  </Hidden>
+						  <Hidden xsDown >
+					      	XSFM 그것은 알기 싫다 <small> 데이터 센트럴 조감도 </small>
+						  </Hidden>
 				      </Link>
 				      </Typography>
 				      
 
 				      <section className={classes.rightToolbar}>
+							  <Tooltip title="Youtube 플레이어">
+						      	<IconButton  color="inherit" onClick={()=>data.play('open')}>
+									<YouTubeIcon/>
+								</IconButton >
+					         </Tooltip>
 				      		<Tooltip title="인물검색">
 						      	<IconButton  color="inherit" onClick={()=>this.props.search()}>
 									<SearchIcon/>
 								</IconButton >
 					         </Tooltip>
+							 {
+								 data.currentElection.type=='inspection'||data.currentState.name==='통계'?null
+								:<Tooltip title="목차">
+									<IconButton  color="inherit" onClick={()=>this.props.toggleContents(true)}>
+										<ListIcon/>
+									</IconButton >
+								</Tooltip>
+							}
 				         </section>
 
 				            
@@ -209,6 +245,8 @@ class Header extends Component {
 			  </HideOnScroll>
 		 
 	    </div>
+		)}
+		</DataContext.Consumer>
 	}
 }
 

@@ -106,7 +106,7 @@ export default class InspectionPage extends ProvincialPage {
 				<Box mb={2}>
 					<Grid container direction="row"  alignItems="center">
 						<Typography variant="h6" >  {section.overview.name}</Typography>
-						<IconButton   variant="contained" color="secondary" onClick={()=>Util.link(section.overview.link)}>
+						<IconButton   variant="contained" color="secondary" onClick={()=>data.play(section.overview.link)}>
 				  			<YouTubeIcon fontSize="small"/>
 					     </IconButton >
 			  		</Grid>

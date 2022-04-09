@@ -37,31 +37,32 @@ const useStyles = (theme) => ({
 class SmallPersonCard extends Component {
 	
 	
-	
 	render() {
 		
 		 const candidate = this.props.candidate;
+		 const type = this.props.type
+	
 		 
 		 
 		return <DataContext.Consumer >
 		    {data=>(
 
-				<Card style={{width:'160px'}}  elevation={0} >
+				<Card style={{width:type==='presidential'?'145px':'157px'}}  elevation={0} >
 					<CardHeader 
-						title={candidate.personName}
+						title={type==='presidential'?candidate.txt:candidate.personName}
 						titleTypographyProps={{variant:'subtitle2' }}
 						style={{
 							padding:'5px',
 							paddingLeft:'10px',
 							paddingRight:'15px',
-							height:'50px',
+							height:'55px',
 							'color':data.parties[candidate.party].textColor,
 							'backgroundColor': data.parties[candidate.party].color
 						}}
 						action={
 			    			 <Box mt={1} ml={1}>		
 			    			 {
-						      		candidate.history>1?
+						      		candidate.history>1&&candidate.person>0?
 				      			<Tooltip title={<>{candidate.photo==1?<PersonAvatar id={candidate.person}/>:null}인물이력</>}>
 								    <IconButton aria-label="settings" onClick={()=>data.history(candidate.person)}>
 						          		<PersonIcon fontSize="small"

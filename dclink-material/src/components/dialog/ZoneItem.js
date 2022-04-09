@@ -58,7 +58,7 @@ export default class ZoneItem extends Component {
 										:<Tooltip title={<>{candidate.photo==1?<PersonAvatar id={candidate.person}/>:null}듣기</>}>
 								    		<Chip label={candidate.personName}  size="small"  icon={<YouTubeIcon style={{'color':data.parties[candidate.party].textColor}}/>}
 						 					style={{'color':data.parties[candidate.party].textColor,'backgroundColor': data.parties[candidate.party].color}}
-								    		onClick={()=>Util.link(candidate.link)}>
+								    		onClick={()=>data.play(candidate.link)}>
 								    		</Chip>		    	
 								    	</Tooltip>
 								    	}
@@ -69,7 +69,7 @@ export default class ZoneItem extends Component {
 							</Grid>
 						</Box>
 						
-						{state.showResult==='full'?
+						{state.showResult==='full'&&item.result=='true'?
 							<Grid container>
 								{item.candidates.length>0?
 									<Grid item>

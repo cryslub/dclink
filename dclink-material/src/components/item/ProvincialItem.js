@@ -275,7 +275,7 @@ class ProvincialItem extends Item {
 	
 	result(item,context){
 		
-		if(item.candidates.length ===0 || item.candidates[0].party===0) return null; 
+		if(item.candidates.length ===0 || item.candidates[0].party===0 || this.props.currentElection?.result!='true') return null; 
 		
 		var max = 0;
         item.candidates.forEach(function(candidate){

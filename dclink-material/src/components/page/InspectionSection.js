@@ -73,7 +73,7 @@ export default class InspectionSection extends Component {
 									                color="textPrimary"
 									              > {item.name}
 									              		<Tooltip title="듣기">
-											              	<IconButton   variant="contained"  onClick={()=>Util.link(item.link)}>
+											              	<IconButton   variant="contained"  onClick={()=>data.play(item.link)}>
 												  				<YouTubeIcon fontSize="small"/>
 												  			</IconButton >
 											  			</Tooltip>

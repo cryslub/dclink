@@ -7,18 +7,22 @@ import Grid from '@material-ui/core/Grid';
 
 import Divider from '@material-ui/core/Divider';
 import CardContent from '@material-ui/core/CardContent';
-import Chip from '@material-ui/core/Chip';
+import Button from '@material-ui/core/Button';
 import Tooltip from '@material-ui/core/Tooltip';
 
 
 import PersonIcon from '@material-ui/icons/Person';
 import StarIcon from '@material-ui/icons/Star';
 import YouTubeIcon from '@material-ui/icons/YouTube';
+import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 
 import Item from './Item.js';
 import Party from '../Party.js';
 import PersonCard from '../PersonCard.js';
+
+import SmallPersonCard from '../SmallPersonCard.js';
 import PersonAvatar from '../PersonAvatar.js';
 
 
@@ -26,6 +30,9 @@ import {MainContext} from '../../MainContext.js';
 import {DataContext} from '../../DataContext.js';
 
 import Util from '../../Util.js';
+
+import Logo from '../Logo.js'
+
 
 
 export default class PresidentialItem extends Item {
@@ -40,7 +47,12 @@ export default class PresidentialItem extends Item {
 					<StarIcon style={{color:'gold'}}/>
 				:null
 				}
-					<Box mr={1} component="span"><Typography  variant={'h6'} component="span">{item.personName}</Typography></Box>
+					<Box mr={1} component="span">
+						<Logo candidate={item} classes={{}} size="small"/>
+					</Box>
+					<Box mr={1} component="span">
+						<Typography  variant={'h6'} component="span">{item.personName}</Typography>
+					</Box>
 					<Box mr={1} component="span">{item.party!==0?this.party(item.party):null}</Box>
 					{item.history>1?<Tooltip title={<>{item.photo==1?<PersonAvatar id={item.person}/>:null}인물이력</>}>
 						<IconButton aria-label="settings"  onClick={()=>data.history(item.person)}>
@@ -74,8 +86,9 @@ export default class PresidentialItem extends Item {
 								return <Grid item key={i}>
 								{sub.link===''? sub.txt
 								:<Tooltip title="듣기"> 
-									<Chip label={sub.txt}  size="small" icon={<YouTubeIcon />} variant="outlined"
-										onClick={()=>Util.link(sub.link)}></Chip>
+									<Button color="primary" variant="text" onClick={()=>data.play(sub.link)} size="small"  style={{  padding:5, minHeight: 0,minWidth: 0,alignitems:'end'}}>
+										{sub.txt}
+									</Button>
 								</Tooltip>		
 								}
 								</Grid>
@@ -106,15 +119,18 @@ export default class PresidentialItem extends Item {
 		{state=>(
 			<DataContext.Consumer>
 		    {data=>(
-		    		
-					    <PersonCard candidate={candidate} type="presidential" style={{margin:'10px'}}>
-					    	{this.body(candidate)}
-	
-			    		</PersonCard>	
-		    	
-				    
-			    )}
-			    </DataContext.Consumer>
+		    	<>	
+					{state.showResult==='min'?
+						<Grid item>	<SmallPersonCard candidate={candidate} type="presidential"/></Grid>
+				:
+					<PersonCard candidate={candidate} type="presidential" style={{margin:'10px'}}>
+						{this.body(candidate)}
+
+					</PersonCard>	
+				}
+				</>   
+			)}
+			</DataContext.Consumer>
 		  )}
 	    </MainContext.Consumer>
 	}

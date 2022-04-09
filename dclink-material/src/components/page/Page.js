@@ -36,7 +36,7 @@ export default class Page extends BaseComponent {
 			this.init();
 		}
 		
-		console.log(election.id+","+state.id)
+	//	console.log(election.id+","+state.id)
 	}
 	
 	async getState(election,state){
@@ -112,13 +112,15 @@ export default class Page extends BaseComponent {
 		
     	await this.getCandidate(items,state);
 		
-		
 		data.setLoading(false);
       
 
 	}
 	
 	async getCandidate(items,state){
+
+		const data = this.props.data;
+
 		const result = await DataService.getCandidate(state.id);
 //		const items = this.state.items;
 		const candidateMap = {};
@@ -147,6 +149,7 @@ export default class Page extends BaseComponent {
 		this.setState({items:items})
 		this.setState({candidateMap:candidateMap})
 
+		data.items = items
 	
 	}
 

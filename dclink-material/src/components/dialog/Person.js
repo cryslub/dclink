@@ -58,7 +58,7 @@ const useStyles = (theme) => ({
   },
  item:{
 	 paddingLeft:0,
-	 borderRadius:4
+	 borderRadius:6
  },
  listItem:{
 	 paddingLeft:'5px'
@@ -247,7 +247,9 @@ class Person extends Component {
 	inspection(data,person){
 		
 		 const { classes } = this.props;
-		return <>
+		return <DataContext.Consumer>
+		{data=>(
+			<>
 			<Typography variant="subtitle2">국정감사기록</Typography>
 			<Box mt={1}>
 			<Grid container>
@@ -271,7 +273,7 @@ class Person extends Component {
 										{icon}
 								</ListItemAvatar>
 								<ListItemText
-									onClick={()=>Util.link(item.link)}
+									onClick={()=>data.play(item.link)}
 									primary= {item.txt==='MVP'?item.txt:item.name} 
 									secondary={<>
 									{item.department+" "+item.date.substring(0,4)}
@@ -287,12 +289,14 @@ class Person extends Component {
 			}
 			</Grid>
 			</Box>
-		</>
+			</>
+		)}
+		</DataContext.Consumer>
 	}
 	
 	awards(person){
 		var runner = null;
-		const candidateLength = person.candidates.filter((candidate)=>{return candidate.rate>0}).length;
+		const candidateLength = person.candidates.filter((candidate)=>{return candidate.result=='당선' || candidate.result=='낙선' || candidate.result=='사퇴' }).length;
 		if(candidateLength>=5){
 			runner =  <Chip label="꾸준출마자" icon={<DirectionsRunIcon  style={{color: 'white'}}/>}  color="primary"
 					style={{backgroundColor: 'gold'}}/>
