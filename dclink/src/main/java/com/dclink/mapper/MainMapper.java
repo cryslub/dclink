@@ -27,25 +27,40 @@ public interface MainMapper {
 	public List<Election> getAllElection();
 
 	@Select("select id,name from state where election = #{election}")
-	public List<State> getAllState(int election);
+	public List<State> getState(int election);
 
 	
-	@Select("select id,name,link,state,party,person,code,parent,type,title,zone, x,y, "
-			+ " (select count(*) from candidate c,item i  where c.item = i.id and c.person=a.person and i.type !='소속위원') + (select count(*) from item where person=a.person ) as history "
-			+ " from item a where state=#{state}")
+//	@Select("select id,name,link,state,party,person,code,parent,type,title,zone, x,y, "
+//			+ " (select count(*) from candidate c,item i  where c.item = i.id and c.person=a.person and i.type !='소속위원') + (select count(*) from item where person=a.person ) as history "
+//			+ " from item a where state=#{state}")
+	@Select("  select a.id,a.name,link,state,party,person,code,parent,type,title,zone, x,y, p.name as personName,p.photo,\r\n"
+			+ "			(select count(*) from candidate c,item i  where c.item = i.id and c.person=a.person and i.type !='소속위원') + (select count(*) from item where person=a.person ) as history \r\n"
+			+ "			 from item a\r\n"
+			+ "			 left outer join person p  on a.person = p.id\r\n"
+			+ "			 where state=#{state} ")
 	public List<Item> getItem( @Param("state") int state);
 
-	@Select("select id,person,item,link,party,txt,count,rate, "
-			+ " (select count(*) from candidate c,item i  where c.item = i.id and c.person=a.person and i.type !='소속위원') + (select count(*) from item where person=a.person )  as history"
-			+ " from candidate a where state=#{state}  order by id")
+//	@Select("select id,person,item,link,party,txt,count,rate, "
+//			+ " (select count(*) from candidate c,item i  where c.item = i.id and c.person=a.person and i.type !='소속위원') + (select count(*) from item where person=a.person )  as history"
+//			+ " from candidate a where state=#{state}  order by id")
+	@Select("   select a.id,person,item,link,party,a.txt,a.count,rate, p.name as personName,p.photo,\r\n"
+			+ "			 (select count(*) from candidate c,item i  where c.item = i.id and c.person=a.person and i.type !='소속위원') + (select count(*) from item where person=a.person )  as history\r\n"
+			+ "			 from candidate a\r\n"
+			+ "			 left outer join person p  on a.person = p.id \r\n"
+			+ "			 where state=#{state} \r\n"
+			+ "			 order by a.id")
 	public List<Candidate> getCandidate( @Param("state") int state);
 
 	@Select("select id,item,party,count,type "
 			+ " from council a where state=#{state}  order by id")
 	public List<Council> getCouncil(int state);
 
-	@Select("select c.id,c.person,c.item,c.link,c.party,c.txt,c.count,c.rate "
-			+ " from candidate c,item i where c.item = i.id and (FIND_IN_SET(#{zone},zone) > 0 or FIND_IN_SET(zone,#{zone}) > 0 or zone=#{zone})  order by id")
+//	@Select("select c.id,c.person,c.item,c.link,c.party,c.txt,c.count,c.rate "
+//			+ " from candidate c,item i where c.item = i.id and (FIND_IN_SET(#{zone},zone) > 0 or FIND_IN_SET(zone,#{zone}) > 0 or zone=#{zone})  order by id")
+	@Select(" select c.id,c.person,c.item,c.link,c.party,c.txt,c.count,c.rate , p.name as personName,p.photo\r\n"
+			+ "			from candidate c,item i ,person p\r\n"
+			+ "			where c.item = i.id and (FIND_IN_SET(#{zone},zone) > 0 or FIND_IN_SET(zone,#{zone}) > 0 or zone=#{zone})  and c.person=p.id\r\n"
+			+ "			order by id")
 	public List<Candidate> getZoneCandidate( @Param("zone") String zone);
 
 	@Select("select c.id,c.item,c.party,c.count,c.type "
@@ -69,15 +84,32 @@ public interface MainMapper {
 	@Select("select id,link, txt from sub where candidate = #{candidate}")
 	public List<Sub> getSubs(int candidate);
 
-	@Select("select concat(e.name,' ',s.name,' ',i.name,ifnull(i.title,'')) as txt, e.name as electionName, c.party, c.link, e.date,c.person, c.txt as result, rate, (select sum(rate) from candidate where item = c.item ) as total "
-			+ "  from candidate c, item i, state s, election e"
-			+ " where  c.item = i.id and i.election = e.id and i.state= s.id and c.person=#{person} and e.type='provincial' "
-			+ " union select concat(e.name,' ',i.name) as txt, e.name as electionName, c.party, c.link,e.date,c.person, c.txt as result, rate, (select sum(rate) from candidate where item = c.item ) as total "
-			+ "  from candidate c, item i, election e"
-			+ " where  c.item = i.id and i.election = e.id and c.person=#{person} and e.type='by' "
-			+ " union select e.name as txt,e.name as electionName,  i.party, i.link,e.date,i.person,i.type as result, code as rate, (select sum(code) from item where state = i.state ) as total "
-			+ " from  item i, election e"
-			+ " where    i.election = e.id and i.person=#{person} and e.type='presidential' ")
+//	@Select("select concat(e.name,' ',s.name,' ',i.name,ifnull(i.title,'')) as txt, e.name as electionName, c.party, c.link, e.date,c.person, c.txt as result, rate, (select sum(rate) from candidate where item = c.item ) as total "
+//			+ "  from candidate c, item i, state s, election e"
+//			+ " where  c.item = i.id and i.election = e.id and i.state= s.id and c.person=#{person} and e.type='provincial' "
+//			+ " union select concat(e.name,' ',i.name) as txt, e.name as electionName, c.party, c.link,e.date,c.person, c.txt as result, rate, (select sum(rate) from candidate where item = c.item ) as total "
+//			+ "  from candidate c, item i, election e"
+//			+ " where  c.item = i.id and i.election = e.id and c.person=#{person} and e.type='by' "
+//			+ " union select e.name as txt,e.name as electionName,  i.party, i.link,e.date,i.person,i.type as result, code as rate, (select sum(code) from item where state = i.state ) as total "
+//			+ " from  item i, election e"
+//			+ " where    i.election = e.id and i.person=#{person} and e.type='presidential' ")
+	@Select("select txt, election, electionName, party,link, date,person,result,rate,personName,photo,total from(\r\n"
+			+ "	    select concat(s.name,' ',i.name,ifnull(i.title,'')) as txt, e.id as election, e.name as electionName, c.party, c.link, e.date,c.person, \r\n"
+			+ "	    			c.txt as result, rate, p.name as personName,p.photo,\r\n"
+			+ "				 (select sum(rate) from candidate where item = c.item ) as total \r\n"
+			+ "				 from candidate c, item i, state s, election e, person p \r\n"
+			+ "				where  c.item = i.id and i.election = e.id and i.state= s.id and c.person=#{person} and e.type='provincial'  and c.person = p.id\r\n"
+			+ "			union \r\n"
+			+ "				select concat(i.name) as txt, e.id as election, e.name as electionName, c.party, c.link,e.date,c.person, c.txt as result, rate, p.name as personName,p.photo, \r\n"
+			+ "				(select sum(rate) from candidate where item = c.item ) as total \r\n"
+			+ "				 from candidate c, item i, election e, person p\r\n"
+			+ "				where  c.item = i.id and i.election = e.id and c.person=#{person} and e.type='by'   and c.person = p.id\r\n"
+			+ "			union \r\n"
+			+ "				select '' as txt,e.id as election, e.name as electionName,  i.party, i.link,e.date,i.person,i.type as result, code as rate,  p.name as personName,p.photo, \r\n"
+			+ "				(select sum(code) from item where state = i.state ) as total \r\n"
+			+ "				from  item i, election e, person p\r\n"
+			+ "				where    i.election = e.id and i.person=#{person} and e.type='presidential' and i.person = p.id\r\n"
+			+ "	)x order by date")
 	public List<History> getHistory(int person);
 	
 
@@ -87,17 +119,36 @@ public interface MainMapper {
 //			+ " where  p.id=c.person and  c.item = i.id and i.election = e.id and  (p.name=trim(#{name}) or p.id=#{name}) and e.type='by' "
 //			+ " union select e.name as txt, i.party, i.link,e.date ,i.person from  item i, election e, person p"
 //			+ " where  p.id=i.person and   i.election = e.id and  (p.name=trim(#{name}) or p.id=#{name}) and e.type='presidential' ")
-	@Select("select concat(e.name,' ',s.name,' ',i.name,ifnull(i.title,'')) as txt, c.party, c.link,e.date,c.person, c.txt as result  from candidate c, item i, state s, election e, person p "
-			+ " where  p.id=c.person and c.item = i.id and i.election = e.id and i.state= s.id and (p.name=trim(#{name}) ) and e.type='provincial' "
-			+ " union select concat(e.name,' ',i.name) as txt, c.party, c.link,e.date ,c.person, c.txt as result from candidate c, item i, election e, person p"
-			+ " where  p.id=c.person and  c.item = i.id and i.election = e.id and  (p.name=trim(#{name}) ) and e.type='by' "
-			+ " union select e.name as txt, i.party, i.link,e.date ,i.person,'' as result from  item i, election e, person p"
-			+ " where  p.id=i.person and   i.election = e.id and  (p.name=trim(#{name}) ) and e.type='presidential' ")
+//	@Select("select concat(e.name,' ',s.name,' ',i.name,ifnull(i.title,'')) as txt, c.party, c.link,e.date,c.person, c.txt as result  from candidate c, item i, state s, election e, person p "
+//			+ " where  p.id=c.person and c.item = i.id and i.election = e.id and i.state= s.id and (p.name=trim(#{name}) ) and e.type='provincial' "
+//			+ " union select concat(e.name,' ',i.name) as txt, c.party, c.link,e.date ,c.person, c.txt as result from candidate c, item i, election e, person p"
+//			+ " where  p.id=c.person and  c.item = i.id and i.election = e.id and  (p.name=trim(#{name}) ) and e.type='by' "
+//			+ " union select e.name as txt, i.party, i.link,e.date ,i.person,'' as result from  item i, election e, person p"
+//			+ " where  p.id=i.person and   i.election = e.id and  (p.name=trim(#{name}) ) and e.type='presidential' ")
+	@Select("select txt, electionName,  party,link, date,person,result,rate,personName,photo,total from(\r\n"
+			+ "    select concat(s.name,' ',i.name,ifnull(i.title,'')) as txt, e.name as electionName, c.party, c.link,e.date,c.person, c.txt as result  ,p.name as personName,p.photo,rate,\r\n"
+			+ "		(select sum(rate) from candidate where item = c.item ) as total \r\n"
+			+ "    	from candidate c, item i, state s, election e, person p \r\n"
+			+ "		where  p.id=c.person and c.item = i.id and i.election = e.id and i.state= s.id and (p.name=trim(#{name}) ) and e.type='provincial' \r\n"
+			+ "	union \r\n"
+			+ "		select concat(i.name) as txt,e.name as electionName,  c.party, c.link,e.date ,c.person, c.txt as result  ,p.name as personName,p.photo,rate,\r\n"
+			+ "		(select sum(rate) from candidate where item = c.item ) as total 		\r\n"
+			+ "		from candidate c, item i, election e, person p\r\n"
+			+ "		where  p.id=c.person and  c.item = i.id and i.election = e.id and  (p.name=trim(#{name}) ) and e.type='by' \r\n"
+			+ "	union select '' as txt,e.name as electionName,  i.party, i.link,e.date ,i.person,i.type as result  ,p.name as personName,p.photo,code as rate,\r\n"
+			+ "		(select sum(code) from item where state = i.state ) as total \r\n"
+			+ "		from  item i, election e, person p\r\n"
+			+ "		where  p.id=i.person and   i.election = e.id and  (p.name=trim(#{name}) ) and e.type='presidential' \r\n"
+			+ "	)x order by date")
 	public List<History> search(String name);
 	
-	@Select("select i.id,i.name as name,i.link,i.state,i.party,i.person,i.code,i.parent,i.type,i.title,i.zone,e.name as election "
-			+ " from item i, state s, election e where i.state = s.id and s.election = e.id and (FIND_IN_SET(#{code},zone) > 0 or FIND_IN_SET(zone,#{code}) > 0 or zone=#{code})"
-			+ "  order by e.date desc")
+//	@Select("select i.id,i.name as name,i.link,i.state,i.party,i.person,i.code,i.parent,i.type,i.title,i.zone,e.name as election "
+//			+ " from item i, state s, election e where i.state = s.id and s.election = e.id and (FIND_IN_SET(#{code},zone) > 0 or FIND_IN_SET(zone,#{code}) > 0 or zone=#{code})"
+//			+ "  order by e.date desc")
+	@Select("  select i.id,i.name as name,i.link,i.state,i.party,i.person,i.code,i.parent,i.type,i.title,i.zone,e.name as election, e.result as result \r\n"
+			+ "			 from item i, state s, election e \r\n"
+			+ "			 where i.state = s.id and s.election = e.id and (FIND_IN_SET(#{zone},zone) > 0 or FIND_IN_SET(zone,#{zone}) > 0 or zone=#{zone})\r\n"
+			+ "			  order by e.date desc")
 	public List<Item> getZoneHistory(String code);
 
 	
@@ -110,16 +161,44 @@ public interface MainMapper {
 			")x order by cnt desc limit 10")
 	public List<History> top10();
 	
-	@Select("select c.party,i.code, i.type, c.rate,c.person, concat(s.name,' ',i.name,ifnull(i.title,''),' ',p.name,' ',c.txt) as txt, i.x, i.y,"
-			+ "  case when i.name ='' then s.name else i.name end  as name, " 
-			+ " (select sum(rate)  from candidate where item=c.item) as total from candidate c, state s,item i,person p "
-			+ " where c.state = s.id and c.item = i.id and p.id = c.person and s.election = #{election}  and c.rate > 0 and c.party>0 and c.party!=5")
+//	@Select("select c.party,i.code, i.type, c.rate,c.person, concat(s.name,' ',i.name,ifnull(i.title,''),' ',p.name,' ',c.txt) as txt, i.x, i.y,"
+//			+ "  case when i.name ='' then s.name else i.name end  as name, " 
+//			+ " (select sum(rate)  from candidate where item=c.item) as total from candidate c, state s,item i,person p "
+//			+ " where c.state = s.id and c.item = i.id and p.id = c.person and s.election = #{election}  and c.rate > 0 and c.party>0 and c.party!=5")
+	@Select("	select c.party,i.code, i.type, c.rate,c.person, concat(s.name,' ',i.name) as region,\r\n"
+			+ "  			concat(s.name,' ',i.name,ifnull(i.title,''),' ',p.name,' ',c.txt) as txt, i.x, i.y,p.photo,p.name as personName,\r\n"
+			+ "			  case when i.name ='' then s.name else i.name end  as name,  \r\n"
+			+ "			 (select sum(rate)  from candidate where item=c.item) as totalRate,0 as total  ,i.id as item\r\n"
+			+ "			 from (\r\n"
+			+ "			 	select * from candidate where rate>0 and party>0\r\n"
+			+ "			 )c\r\n"
+			+ "			 join( \r\n"
+			+ "			 	select * from state 	where  election = #{election} 	\r\n"
+			+ "			) s  on c.state = s.id \r\n"
+			+ "			 join (\r\n"
+			+ "			 	select * from item  where  election = #{election}\r\n"
+			+ "			 ) i on c.item = i.id\r\n"
+			+ "			 join person p on p.id = c.person ")
 	public List<Rate> getRates(int election);
 
 	
-	@Select("select c.party,i.code, i.type, c.count as rate,concat(s.name,' ',i.name) as txt, "
-			+ " (select sum(count) from council where item=c.item and type='rate') as total from council c, state s,item i "
-			+ " where c.state = s.id and c.item = i.id and s.election = #{election} and c.type='rate' and c.party>0 and c.party!=5")
+//	@Select("select c.party,i.code, i.type, c.count as rate,concat(s.name,' ',i.name) as txt, "
+//			+ " (select sum(count) from council where item=c.item and type='rate') as total from council c, state s,item i "
+//			+ " where c.state = s.id and c.item = i.id and s.election = #{election} and c.type='rate' and c.party>0 and c.party!=5")
+	@Select("select c.party,i.code, i.type, c.rate,c.person, concat(s.name,' ',i.name) as region,\r\n"
+			+ "  			concat(s.name,' ',i.name,ifnull(i.title,''),' ',p.name,' ',c.txt) as txt, i.x, i.y,p.photo,p.name as personName,\r\n"
+			+ "			  case when i.name ='' then s.name else i.name end  as name,  \r\n"
+			+ "			 (select sum(count) from council where item=c.item and type='rate') as totalRate, 0 as total ,i.id as item\r\n"
+			+ "			 from (\r\n"
+			+ "			 	select * from candidate where rate>0 and party>0\r\n"
+			+ "			 )c\r\n"
+			+ "			 join( \r\n"
+			+ "			 	select * from state 	where  election = #{election} 	\r\n"
+			+ "			) s  on c.state = s.id \r\n"
+			+ "			 join (\r\n"
+			+ "			 	select * from item  where  election = #{election}\r\n"
+			+ "			 ) i on c.item = i.id\r\n"
+			+ "			 join person p on p.id = c.person ")
 	public List<Rate> getRRates(int election);
 
 	
@@ -176,11 +255,31 @@ public interface MainMapper {
 	@Update("update person set photo = 1 where id = #{id}")
 	public void photo(int id);
 
+	@Select("select * from state")
+	public List<State> getAllState();
+	 
+	@Select("select * from partySub")
+	public List<Sub> getPartySubs();
 
+	@Select("	select s.id,s.link, s.txt , c.id as candidate"
+			+ "		from sub s,candidate c "
+			+ "		where s.candidate = c.id and c.state = #{state}")
+	public List<Sub> getStateSubs(Integer state);
 
+	@Select(" select a.id,a.name,link,state,party,person,code,parent,type,title,zone, x,y, p.name as personName,p.photo,\r\n"
+			+ "			(select count(*) from candidate c,item i  where c.item = i.id and c.person=a.person and i.type !='소속위원') + (select count(*) from item where person=a.person ) as history \r\n"
+			+ "			 from item a\r\n"
+			+ "			 left outer join person p  on a.person = p.id\r\n"
+			+ "			 where election=#{election}")
+	public List<Item> getElectionItem(Integer election);
 
-
-	
+	@Select("select c.party,i.code, i.type, c.count as rate,concat(s.name,' ',i.name) as txt, \r\n"
+			+ "		(select sum(count) from council where item=c.item and type='rate') as totalRate \r\n"
+			+ "		from council c\r\n"
+			+ "		join state s\r\n"
+			+ "		join item i \r\n"
+			+ "		where c.state = s.id and c.item = i.id and s.election = #{election} and c.type='rate' and c.party>0 and c.party!=5")
+	public List<Rate> getProportion(int election);
 
 
 

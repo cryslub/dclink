@@ -10,6 +10,7 @@ public class Sub {
 	int state;
 	int party;
 	int person;
+	int candidate;
 	
 	List<Candidate> candidates;
 	
@@ -57,6 +58,12 @@ public class Sub {
 	}
 	public void setPerson(int person) {
 		this.person = person;
+	}
+	public int getCandidate() {
+		return candidate;
+	}
+	public void setCandidate(int candidate) {
+		this.candidate = candidate;
 	}
 	
 	

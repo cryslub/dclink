@@ -11,6 +11,8 @@ public class History {
 	int rate;
 	int total;
 	String electionName;
+	String personName;
+	int photo;
 	
 	public String getTxt() {
 		return txt;
@@ -65,6 +67,18 @@ public class History {
 	}
 	public void setElectionName(String electionName) {
 		this.electionName = electionName;
+	}
+	public String getPersonName() {
+		return personName;
+	}
+	public void setPersonName(String personName) {
+		this.personName = personName;
+	}
+	public int getPhoto() {
+		return photo;
+	}
+	public void setPhoto(int photo) {
+		this.photo = photo;
 	}
 	
 	

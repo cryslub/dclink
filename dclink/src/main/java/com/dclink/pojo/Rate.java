@@ -13,6 +13,7 @@ public class Rate {
 	int y;
 	String name;
 	int person;
+	int totalRate;
 	
 	public int getParty() {
 		return party;
@@ -79,6 +80,12 @@ public class Rate {
 	}
 	public void setPerson(int person) {
 		this.person = person;
+	}
+	public int getTotalRate() {
+		return totalRate;
+	}
+	public void setTotalRate(int totalRate) {
+		this.totalRate = totalRate;
 	}
 	
 	

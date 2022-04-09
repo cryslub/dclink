@@ -21,7 +21,9 @@ public class Item {
 	int y;
 	
 	List<Candidate> candidates;
-	
+	String personName;
+	int photo;
+	String result;
 	
 	public String getZone() {
 		return zone;
@@ -119,6 +121,24 @@ public class Item {
 	}
 	public void setY(int y) {
 		this.y = y;
+	}
+	public String getPersonName() {
+		return personName;
+	}
+	public void setPersonName(String personName) {
+		this.personName = personName;
+	}
+	public int getPhoto() {
+		return photo;
+	}
+	public void setPhoto(int photo) {
+		this.photo = photo;
+	}
+	public String getResult() {
+		return result;
+	}
+	public void setResult(String result) {
+		this.result = result;
 	}
 	
 	

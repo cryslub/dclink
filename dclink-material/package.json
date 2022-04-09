@@ -16,7 +16,7 @@
     "echarts": "^4.7.0",
     "echarts-for-react": "^2.0.15-beta.1",
     "highcharts": "^8.0.4",
-    "react": "^16.13.1",
+    "react": "^16.14.0",
     "react-device-detect": "^1.12.1",
     "react-dom": "^16.13.1",
     "react-number-format": "^4.4.1",

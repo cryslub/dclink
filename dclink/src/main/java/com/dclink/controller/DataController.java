@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -24,8 +26,8 @@ import com.dclink.pojo.State;
 import com.dclink.pojo.Sub;
 import com.dclink.pojo.Zone;
 
+@CrossOrigin
 @Controller
-@RequestMapping("/data")
 public class DataController {
 
 	@Autowired
@@ -40,12 +42,25 @@ public class DataController {
     }
 
 	@RequestMapping("/states.do")
-	public @ResponseBody List<State> states(@RequestParam("election") int election) {
-		List<State> ret = mainMapper.getAllState(election);
-		
+	public @ResponseBody List<State> states(@RequestParam(value="election", required=false) Integer election) {
+		List<State> ret = null;
+		if(election==null) {
+			ret = mainMapper.getAllState();			
+		}else {
+			ret = mainMapper.getState(election);
+		}		
         return ret;
     }
+
 	
+	@RequestMapping("/state/election/{election}")
+	public @ResponseBody List<State> electionSstates(@PathVariable Integer election) {
+		List<State> ret = null;
+		ret = mainMapper.getState(election);
+			
+        return ret;
+    }
+
 	@RequestMapping("/persons.do")
 	public @ResponseBody List<Person> persons() {
 		List<Person> ret = mainMapper.getPerson();
@@ -75,6 +90,22 @@ public class DataController {
         return ret;
     }
 
+	
+	
+	@RequestMapping("/item/state/{state}")
+	public @ResponseBody List<Item> stateItems(@PathVariable Integer state) {
+		List<Item> ret = mainMapper.getItem(state);
+        return ret;
+    }
+
+	
+	@RequestMapping("/item/election/{election}")
+	public @ResponseBody List<Item> electionItems(@PathVariable Integer election) {
+		List<Item> ret = mainMapper.getElectionItem(election);
+        return ret;
+    }
+	
+	
 	@RequestMapping("/candidates.do")
 	public @ResponseBody List<Candidate> candidates(@RequestParam("state") int state) {
 		List<Candidate> ret = mainMapper.getCandidate(state);
@@ -82,6 +113,17 @@ public class DataController {
         return ret;
     }
 
+	
+	
+	@RequestMapping("/candidate/state/{state}")
+	public @ResponseBody List<Candidate> stateCandidates(@PathVariable Integer state) {
+		List<Candidate> ret = mainMapper.getCandidate(state);
+        return ret;
+    }
+	
+	
+	
+	
 	@RequestMapping("/councils.do")
 	public @ResponseBody List<Council> councils(@RequestParam("state") int state) {
 		List<Council> ret = mainMapper.getCouncil(state);
@@ -89,6 +131,14 @@ public class DataController {
         return ret;
     }
 
+
+	@RequestMapping("/council/state/{state}")
+	public @ResponseBody List<Council> stateCouncils(@PathVariable Integer state) {
+		List<Council> ret = mainMapper.getCouncil(state);
+        return ret;
+    }
+	
+	
 	@RequestMapping("/zoneCandidates.do")
 	public @ResponseBody List<Candidate> zoneCandidates(@RequestParam("zone") String zone) {
 		List<Candidate> ret = mainMapper.getZoneCandidate(zone);
@@ -96,27 +146,65 @@ public class DataController {
         return ret;
     }
 
+	
+	@RequestMapping("/candidate/zone/{zone}")
+	public @ResponseBody List<Candidate> getZoneCandidate(@PathVariable String zone) {
+		List<Candidate> ret = mainMapper.getZoneCandidate(zone);
+        return ret;
+    }
+	
+	
 	@RequestMapping("/zoneCouncils.do")
 	public @ResponseBody List<Council> zoneCouncils(@RequestParam("zone") String zone) {
 		List<Council> ret = mainMapper.getZoneCouncil(zone);
 		
         return ret;
     }
+	
+	
+	@RequestMapping("/council/zone/{zone}")
+	public @ResponseBody List<Council> getZoneCouncil(@PathVariable String zone) {
+		List<Council> ret = mainMapper.getZoneCouncil(zone);
+        return ret;
+    }
+	
 
 	
+	@RequestMapping("/party/subs.do")
+	public @ResponseBody List<Sub> partySubs() {
+		List<Sub> ret = mainMapper.getPartySubs();
+		
+        return ret;
+    }
+
 	@RequestMapping("/subs.do")
 	public @ResponseBody List<Sub> subs(@RequestParam("candidate") int candidate) {
 		List<Sub> ret = mainMapper.getSubs(candidate);
 		
         return ret;
     }
-
+	
+	
+	@RequestMapping("/sub/state/{state}")
+	public @ResponseBody List<Sub> stateSubs(@PathVariable Integer state) {
+		List<Sub> ret = mainMapper.getStateSubs(state);
+        return ret;
+    }
+	
 	@RequestMapping("/history.do")
 	public @ResponseBody List<History> history(@RequestParam("person") int person) {
 		List<History> ret = mainMapper.getHistory(person);
 		
         return ret;
     }
+	
+	@RequestMapping("/history/person/{person}")
+	public @ResponseBody List<History> personHistory(@PathVariable int person) {
+		List<History> ret = mainMapper.getHistory(person);
+        return ret;
+    }
+	
+	
 	
 	@RequestMapping("/zoneHistory.do")
 	public @ResponseBody List<Item> zoneHistory(@RequestParam("code") String code) {
@@ -126,12 +214,27 @@ public class DataController {
     }
 
 	
+	@RequestMapping("/history/zone/{zone}")
+	public @ResponseBody List<Item> getZoneHistory(@PathVariable String zone) {
+		List<Item> ret = mainMapper.getZoneHistory(zone);
+        return ret;
+    }
+	
 	@RequestMapping(value="/inspection.do",method=RequestMethod.GET,params={"person"})
 	public @ResponseBody List<Inspection> inspection(@RequestParam("person") int person) {
 		List<Inspection> ret = mainMapper.getInspection(person);
 		
         return ret;
     }
+	
+	@RequestMapping("/inspection/person/{person}")
+	public @ResponseBody List<Inspection> personInspection(@PathVariable int person) {
+		List<Inspection> ret = mainMapper.getInspection(person);
+        return ret;
+    }
+	
+	
+	
 	
 	@RequestMapping(value="/inspection.do",method=RequestMethod.GET,params={})
 	public @ResponseBody List<Inspection> allInspection() {
@@ -148,12 +251,33 @@ public class DataController {
         return ret;
     }
 	
+	@RequestMapping("/search/name/{name}")
+	public @ResponseBody List<History> searchName(@PathVariable String name) {
+		List<History> ret = mainMapper.search(name);
+        return ret;
+    }
+	
+	
+	
 	@RequestMapping(value="/rates.do")
 	public @ResponseBody List<Rate> rates(@RequestParam("election") int election) {
 		List<Rate> ret = mainMapper.getRates(election);
 		
         return ret;
     }
+	
+	@RequestMapping("/rates/election/{election}")
+	public @ResponseBody List<Rate> electionRates(@PathVariable int election) {
+		List<Rate> ret = mainMapper.getRates(election);
+        return ret;
+    }
+	
+	@RequestMapping("/proportion/election/{election}")
+	public @ResponseBody List<Rate> proportions(@PathVariable int election) {
+		List<Rate> ret = mainMapper.getProportion(election);
+        return ret;
+    }
+	
 	
 	@RequestMapping(value="/rrates.do")
 	public @ResponseBody List<Rate> rrates(@RequestParam("election") int election) {
@@ -208,6 +332,8 @@ public class DataController {
 		
         return "";
     }
+	
+	
 	
 	@RequestMapping(value="/council.do",method=RequestMethod.PUT)
 	public @ResponseBody String editCouncil(@RequestBody Council council) {

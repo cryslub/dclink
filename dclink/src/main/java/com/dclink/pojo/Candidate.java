@@ -15,6 +15,8 @@ public class Candidate
 	int count;
 	int history;
 	float rate;
+	String personName;
+	int photo;
 	
 	public int getId() {
 		return id;
@@ -76,6 +78,18 @@ public class Candidate
 	}
 	public void setRate(float rate) {
 		this.rate = rate;
+	}
+	public String getPersonName() {
+		return personName;
+	}
+	public void setPersonName(String personName) {
+		this.personName = personName;
+	}
+	public int getPhoto() {
+		return photo;
+	}
+	public void setPhoto(int photo) {
+		this.photo = photo;
 	}
 	
 	
