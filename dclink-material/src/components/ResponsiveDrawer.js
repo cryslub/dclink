@@ -93,7 +93,7 @@ const useStyles = makeStyles((theme) => ({
 	    ...theme.typography.button,
 	    verticalAlign: 'middle',
 	    display: 'inline-flex',
-	    minHeight:'58px'
+	    minHeight:'85px'
 	  },
 }));
 

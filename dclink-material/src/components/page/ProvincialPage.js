@@ -258,7 +258,7 @@ export default class ProvincialPage extends Page {
 			<DataContext.Consumer>
 	    	{data=>(
 	    		<>
-	    		{state.showResult==='full' && this.state.currentState.name!=='비례' && this.props.currentElection.type!=='inspection'?
+	    		{state.showResult==='full' && this.state.currentState.name!=='비례' && this.props.currentElection.type!=='inspection' && this.props.currentElection.result=='true'?
 	    		<Grid container>
 	    			<Grid item>
 	    			<Box mb={1}><Typography variant="h6"  >{isBasic?<span>{isStatics?'광역':'기초'} 후보 및 비례득표</span>:<span>후보득표</span>} 통계</Typography></Box>

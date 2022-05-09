@@ -12,7 +12,7 @@ import {DataContext} from '../DataContext.js';
  const ContentsDrawer = (props)=>{
 
     const scrollTo = (item)=>{
-        window.scrollTo(0, item.ref.current.item.current.offsetTop)   
+        window.scrollTo(0, item.ref.current.item.current.offsetTop-60)   
         props.toggleContents(false)
     }
 
@@ -38,6 +38,8 @@ import {DataContext} from '../DataContext.js';
                     if(data.currentState.name==='비례'){
                         text = data.parties[item.party].name
                     }
+
+                    if(text=="") text = item.title
 
                     return <ListItem button key={keyName} onClick={()=>scrollTo(item)}>
                         <ListItemText primary={text} />

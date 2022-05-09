@@ -26,7 +26,8 @@ const Logo = (props)=>{
 	
 	
 	if(candidate.party == 5){
-		avatar = <Avatar  variant="rounded" className={classes.media} style={{backgroundColor:'grey'}} style={sx}>무</Avatar>
+		sx.backgroundColor='grey'
+		avatar = <Avatar  variant="rounded" className={classes.media} style={sx}>무</Avatar>
 	}
 	
 	if(candidate.party == 0){

@@ -79,7 +79,8 @@ export default class Doughnut extends Component {
 				  	innerRadius={half?0.3:0.45}
 				  	startAngle={half?-90:0}
 				  	endAngle={half?90:360}
-
+					  padAngle={1}
+					 
 				  	enableRadialLabels={false}
 			        enableSlicesLabels={false}
 					colors={{ datum: 'color' }}

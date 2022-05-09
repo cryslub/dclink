@@ -24,7 +24,7 @@ export default class Party extends Component {
 	    			data.parties[party].subs[state.currentElection.id]?
 	    				<Tooltip title="?">
 	    				<Chip label={data.parties[party].name}  size="small"  icon={<YouTubeIcon style={{'color':data.parties[party].textColor}}/>}
-	    					onClick={()=>Util.link(data.parties[party].subs[state.currentElection.id].link)}
+	    					onClick={()=>data.play(data.parties[party].subs[state.currentElection.id].link)}
 	    					style={{'color':data.parties[party].textColor,'backgroundColor': data.parties[party].color}}></Chip>
 	    				</Tooltip>
 	    			:<Chip label={data.parties[party].name}  size="small" 

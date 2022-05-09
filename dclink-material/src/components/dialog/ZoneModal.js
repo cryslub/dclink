@@ -166,10 +166,9 @@ export default class ZoneModal extends Component {
 			        	Object.keys(electionHistory).map((electionName,i)=>{
 			        		const items = electionHistory[electionName]
 			        		return <>
-			        			{i>0?<Divider/>:null}
 			        			<Box mb={1} mt={3}><Typography variant="subtitle2">{electionName}</Typography></Box>
 			        			
-			        			<Box mb={3} >
+			        			<Box mb={5} >
 			        			 <Paper>
 				        			 
 				        			{

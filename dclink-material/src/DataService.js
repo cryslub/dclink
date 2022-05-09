@@ -1,9 +1,9 @@
 import { isAndroid } from "react-device-detect";
 
-const host =  "/dclink/";
+//const host =  "/dclink/";
 
 //const host = "http://localhost:8001/dclink/";
-//const host =  "http://localhost:8080/dclink/";
+const host =  "http://localhost:8080/dclink/";
 
 
 const getData = async (url) => {
@@ -16,11 +16,11 @@ const getData = async (url) => {
 }
 
  const DataService = {
-// host: "http://localhost:8001/dclink/",
-	host: "",
+	// host: "http://localhost:8001/dclink/",
+	//host: "",
 
 	// this.host = "";
-	// this.host = "http://cryslub.cafe24app.com/ytlink/";
+	//host = "http://cryslub.cafe24app.com/dclink/";
 
 
 	 getParty :  async () =>{
