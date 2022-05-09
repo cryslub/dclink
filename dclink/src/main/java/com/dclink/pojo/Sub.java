@@ -11,6 +11,7 @@ public class Sub {
 	int party;
 	int person;
 	int candidate;
+	int election;
 	
 	List<Candidate> candidates;
 	
@@ -64,6 +65,12 @@ public class Sub {
 	}
 	public void setCandidate(int candidate) {
 		this.candidate = candidate;
+	}
+	public int getElection() {
+		return election;
+	}
+	public void setElection(int election) {
+		this.election = election;
 	}
 	
 	
