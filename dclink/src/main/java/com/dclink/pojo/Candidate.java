@@ -18,6 +18,21 @@ public class Candidate
 	String personName;
 	int photo;
 	
+	String chinese;
+	String birth;
+	String address;
+	String job;
+	String education;
+	String career1;
+	String career2;
+	String gender;
+	
+	public String getChinese() {
+		return chinese;
+	}
+	public void setChinese(String chinese) {
+		this.chinese = chinese;
+	}
 	public int getId() {
 		return id;
 	}
@@ -90,6 +105,48 @@ public class Candidate
 	}
 	public void setPhoto(int photo) {
 		this.photo = photo;
+	}
+	public String getBirth() {
+		return birth;
+	}
+	public void setBirth(String birth) {
+		this.birth = birth;
+	}
+	public String getAddress() {
+		return address;
+	}
+	public void setAddress(String address) {
+		this.address = address;
+	}
+	public String getJob() {
+		return job;
+	}
+	public void setJob(String job) {
+		this.job = job;
+	}
+	public String getEducation() {
+		return education;
+	}
+	public void setEducation(String education) {
+		this.education = education;
+	}
+	public String getCareer1() {
+		return career1;
+	}
+	public void setCareer1(String career1) {
+		this.career1 = career1;
+	}
+	public String getCareer2() {
+		return career2;
+	}
+	public void setCareer2(String career2) {
+		this.career2 = career2;
+	}
+	public String getGender() {
+		return gender;
+	}
+	public void setGender(String gender) {
+		this.gender = gender;
 	}
 	
 	

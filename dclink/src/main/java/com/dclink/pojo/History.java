@@ -13,6 +13,18 @@ public class History {
 	String electionName;
 	String personName;
 	int photo;
+	int election;
+	String birth;
+	String address;
+	String job;
+	String education;
+	String career1;
+	String career2;
+	String gender;
+	String chinese;
+	String partyName;
+	String ward;
+	String type;
 	
 	public String getTxt() {
 		return txt;
@@ -79,6 +91,78 @@ public class History {
 	}
 	public void setPhoto(int photo) {
 		this.photo = photo;
+	}
+	public int getElection() {
+		return election;
+	}
+	public void setElection(int election) {
+		this.election = election;
+	}
+	public String getBirth() {
+		return birth;
+	}
+	public void setBirth(String birth) {
+		this.birth = birth;
+	}
+	public String getAddress() {
+		return address;
+	}
+	public void setAddress(String address) {
+		this.address = address;
+	}
+	public String getJob() {
+		return job;
+	}
+	public void setJob(String job) {
+		this.job = job;
+	}
+	public String getEducation() {
+		return education;
+	}
+	public void setEducation(String education) {
+		this.education = education;
+	}
+	public String getCareer1() {
+		return career1;
+	}
+	public void setCareer1(String career1) {
+		this.career1 = career1;
+	}
+	public String getCareer2() {
+		return career2;
+	}
+	public void setCareer2(String career2) {
+		this.career2 = career2;
+	}
+	public String getGender() {
+		return gender;
+	}
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+	public String getChinese() {
+		return chinese;
+	}
+	public void setChinese(String chinese) {
+		this.chinese = chinese;
+	}
+	public String getPartyName() {
+		return partyName;
+	}
+	public void setPartyName(String partyName) {
+		this.partyName = partyName;
+	}
+	public String getWard() {
+		return ward;
+	}
+	public void setWard(String ward) {
+		this.ward = ward;
+	}
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
 	}
 	
 	

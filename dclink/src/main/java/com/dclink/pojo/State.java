@@ -6,6 +6,7 @@ public class State {
 	int id;
 	String name;
 	int election;
+	String fullName;
 	
 	public int getId() {
 		return id;
@@ -24,6 +25,12 @@ public class State {
 	}
 	public void setElection(int election) {
 		this.election = election;
+	}
+	public String getFullName() {
+		return fullName;
+	}
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
 	}
 	
 	

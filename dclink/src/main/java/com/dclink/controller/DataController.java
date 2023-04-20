@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.dclink.mapper.MainMapper;
 import com.dclink.pojo.Candidate;
+import com.dclink.pojo.CandidateInfo;
 import com.dclink.pojo.Council;
 import com.dclink.pojo.Election;
 import com.dclink.pojo.History;
@@ -21,6 +22,7 @@ import com.dclink.pojo.Inspection;
 import com.dclink.pojo.Item;
 import com.dclink.pojo.Party;
 import com.dclink.pojo.Person;
+import com.dclink.pojo.Promise;
 import com.dclink.pojo.Rate;
 import com.dclink.pojo.State;
 import com.dclink.pojo.Sub;
@@ -121,7 +123,30 @@ public class DataController {
         return ret;
     }
 	
+
+
+	@RequestMapping("/candidate/info/{state}/{type}")
+	public @ResponseBody List<CandidateInfo> candidateInfo(@PathVariable Integer state,@PathVariable String type) {
+		List<CandidateInfo> ret = mainMapper.getCandidateInfo(state,type);
+		
+        return ret;
+    }
+
+	@RequestMapping("/candidate/promise/{state}")
+	public @ResponseBody List<Promise> promise(@PathVariable Integer state) {
+		List<Promise> ret = mainMapper.getPromise(state);
+		
+        return ret;
+    }
+
 	
+	@RequestMapping("/result/{state}/{type}")
+	public @ResponseBody List<CandidateInfo> result(@PathVariable Integer state,@PathVariable String type) {
+		List<CandidateInfo> ret = mainMapper.getResult(state,type);
+		
+        return ret;
+    }
+
 	
 	
 	@RequestMapping("/councils.do")
@@ -168,7 +193,22 @@ public class DataController {
         return ret;
     }
 	
+	@RequestMapping("/council/basic/{zone}")
+	public @ResponseBody List<Council> getBasicZoneCouncil(@PathVariable String zone) {
+		List<Council> ret = mainMapper.getBasicZoneCouncil(zone);
+        return ret;
+    }
+	@RequestMapping("/council/metro/{zone}")
+	public @ResponseBody List<Council> getMetroZoneCouncil(@PathVariable String zone) {
+		List<Council> ret = mainMapper.getMetroZoneCouncil(zone);
+        return ret;
+    }
 
+	@RequestMapping("/council/rate/{zone}")
+	public @ResponseBody List<Council> getZoneRate(@PathVariable String zone) {
+		List<Council> ret = mainMapper.getZoneRate(zone);
+        return ret;
+    }
 	
 	@RequestMapping("/party/subs.do")
 	public @ResponseBody List<Sub> partySubs() {
@@ -194,6 +234,14 @@ public class DataController {
 	@RequestMapping("/history.do")
 	public @ResponseBody List<History> history(@RequestParam("person") int person) {
 		List<History> ret = mainMapper.getHistory(person);
+		
+        return ret;
+    }
+
+	
+	@RequestMapping("/info/{id}/history")
+	public @ResponseBody List<History> infoHistory(@PathVariable String id) {
+		List<History> ret = mainMapper.getInfoHistory(id);
 		
         return ret;
     }
@@ -247,6 +295,13 @@ public class DataController {
 	@RequestMapping(value="/search.do")
 	public @ResponseBody List<History> search(@RequestParam("name") String name) {
 		List<History> ret = mainMapper.search(name);
+		
+        return ret;
+    }
+	
+	@RequestMapping(value="/searchInfo.do")
+	public @ResponseBody List<CandidateInfo> searchInfo(@RequestParam("name") String name) {
+		List<CandidateInfo> ret = mainMapper.searchInfo(name);
 		
         return ret;
     }
@@ -401,4 +456,6 @@ public class DataController {
         return "";
     }
 
+	
+	
 }
