@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 
 import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
 import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
@@ -120,22 +119,27 @@ export default class ZoneModal extends Component {
 	async getCouncil(zone){
 		
 		const zoneItems = this.zoneItems;
-		const result = await DataService.getZoneCouncil(zone);
+		let result = []
+
+		if(zone.length==2){
+			result = await DataService.getMetroZoneCouncil(zone);	
+		}else{
+			result = await DataService.getBasicZoneCouncil(zone);	
+		}
 		result.forEach(function(council) {
 			if(zoneItems[council.item]!==undefined){
-	    		if(council.type === 'rate'){
-		    		zoneItems[council.item].rates.push(council);    	    			    	  
-	    		}else if(council.type === 'mrate'){
-		    		zoneItems[council.item].mrates.push(council);    	    			    	  
-	    		}else if(council.type === 'metro'){
-		    		zoneItems[council.item].metros.push(council);    	    			    	      	    			
-	    		}else{
-		    		zoneItems[council.item].councils.push(council);    	    			    	    			
-	    		}
+		    	zoneItems[council.item].councils.push(council);    	    			    	    			
 			}
     	});
     	
+		result = await DataService.getZoneRate(zone);	
     	
+		result.forEach(function(council) {
+			if(zoneItems[council.item]!==undefined){
+		    	zoneItems[council.item].rates.push(council);    	    			    	    			
+			}
+    	});
+
     	this.zoneItems = zoneItems;
 	}
 	

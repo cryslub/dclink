@@ -5,13 +5,11 @@ html, body {
 
 
 body { 
-	padding-right: 0 !important ;
 	overflow-x: hidden
 }
 
 
 .modal {
-    padding-right: 0px !important;
 }
 
 .modal-dialog{

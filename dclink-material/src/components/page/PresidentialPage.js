@@ -26,13 +26,13 @@ export default class PresidentialPage extends Page {
 				  			
 				  			const item = items[keyName];
 				  			const ref = React.createRef();
-							if(data.items[keyName]!=undefined)
+							if(data.items[keyName]!==undefined)
 								data.items[keyName].ref = ref;
 				  			return 	<PresidentialItem item={item} key={keyIndex} index={keyIndex} ref={ref}/>
 						})}
 				  	</Grid>
 				  	<Hidden xsDown implementation="css">
-						{state.showResult==='full' &&this.props.currentElection.result=='true'?
+						{state.showResult==='full' &&this.props.currentElection.result==='true'?
 		  				<Box height='100%'>
 							<small>득표</small>
 							<LongBar data={data} items={items} type="person"/>

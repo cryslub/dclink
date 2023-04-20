@@ -20,8 +20,6 @@ import Doughnut from '../chart/Doughnut.js';
 import {DataContext} from '../../DataContext.js';
 import {MainContext} from '../../MainContext.js';
 
-import Util from '../../Util.js';
-
 
 
 export default class ZoneItem extends Component {
@@ -55,7 +53,7 @@ export default class ZoneItem extends Component {
 											<Chip label={candidate.personName}  size="small"  
 							 					style={{'color':data.parties[candidate.party].textColor,'backgroundColor': data.parties[candidate.party].color}}>
 									    		</Chip>
-										:<Tooltip title={<>{candidate.photo==1?<PersonAvatar id={candidate.person}/>:null}듣기</>}>
+										:<Tooltip title={<>{candidate.photo===1?<PersonAvatar id={candidate.person}/>:null}듣기</>}>
 								    		<Chip label={candidate.personName}  size="small"  icon={<YouTubeIcon style={{'color':data.parties[candidate.party].textColor}}/>}
 						 					style={{'color':data.parties[candidate.party].textColor,'backgroundColor': data.parties[candidate.party].color}}
 								    		onClick={()=>data.play(candidate.link)}>
@@ -69,7 +67,7 @@ export default class ZoneItem extends Component {
 							</Grid>
 						</Box>
 						
-						{state.showResult==='full'&&item.result=='true'?
+						{state.showResult==='full'&&item.result==='true'?
 							<Grid container>
 								{item.candidates.length>0?
 									<Grid item>

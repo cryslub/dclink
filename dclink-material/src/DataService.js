@@ -1,10 +1,8 @@
-import { isAndroid } from "react-device-detect";
 
 //const host =  "/dclink/";
 
 //const host = "http://localhost:8001/dclink/";
 const host =  "http://localhost:8080/dclink/";
-
 
 const getData = async (url) => {
 //	 if(isAndroid){
@@ -118,7 +116,15 @@ const getData = async (url) => {
 		   
 		  return res.json();		    	
 			
-		},	
+	},	
+	searchInfo :  async (name) =>{
+		
+	
+		const res = await  fetch(host+"data/searchInfo.do?name="+name)
+			
+		return res.json();		    	
+			
+	},	
 	getHistory :  async (person) =>{
 		 
 		
@@ -127,6 +133,14 @@ const getData = async (url) => {
 	  return res.json();		    	
 		
 	},
+	getInfoHistory :  async (id) =>{
+		 
+		
+		const res = await  fetch(host+"data/info/"+id+"/history")
+		 
+		return res.json();		    	
+		  
+	  },
 	getInspection :  async (person) =>{
 		 
 		
@@ -160,6 +174,30 @@ const getData = async (url) => {
 		  return res.json();		    	
 			
 	},
+	getBasicZoneCouncil :  async (zone) =>{
+		 
+		
+		const res = await  fetch(host+"data/council/basic/"+zone)
+		 
+		return res.json();		    	
+		  
+	},
+	getMetroZoneCouncil :  async (zone) =>{
+			
+			
+		const res = await  fetch(host+"data/council/metro/"+zone)
+		
+		return res.json();		    	
+		
+	},
+	getZoneRate :  async (zone) =>{
+			
+			
+		const res = await  fetch(host+"data/council/rate/"+zone)
+		
+		return res.json();		    	
+		
+	},
 
 	getCouncil :  async (state) =>{
 		 
@@ -184,8 +222,28 @@ const getData = async (url) => {
 		   
 		  return res.json();		    	
 			
-	}
-	
+	},
+	getCandidateInfo : 	async (type,state) =>{
+		 
+		
+		const res = await  fetch(host+"data/candidate/info/"+state+"/"+type)
+		 
+		return res.json();		    			  
+  	},  
+	getResult : 	async (type,state) =>{
+		 
+		
+		const res = await  fetch(host+"data/result/"+state+"/"+type)
+		 
+		return res.json();		    			  
+  	},  
+	getPromise : 	async (state) =>{
+		 
+		
+		const res = await  fetch(host+"data/candidate/promise/"+state)
+		 
+		return res.json();		    			  
+  	},  
 	
 }
  

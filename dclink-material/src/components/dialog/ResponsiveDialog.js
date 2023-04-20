@@ -38,7 +38,7 @@ class ResponsiveDialog extends Component {
 			</Hidden>
 			<Hidden xsDown >
 				<Dialog onClose={this.props.close} open={this.props.open} fullWidth={true}
-					maxWidth='md'
+				 	maxWidth='md'
 					classes={{
 				        paper: classes.content
 				      }}

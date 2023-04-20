@@ -13,7 +13,6 @@ import Grid from '@material-ui/core/Grid';
 
 import {DataContext} from '../DataContext.js';
 import HowToVoteIcon from '@material-ui/icons/HowToVote';
-import MapIcon from '@material-ui/icons/Map';
 import BookIcon from '@material-ui/icons/Book';
 
 export default class Middle extends Component {
@@ -33,7 +32,7 @@ export default class Middle extends Component {
 				this.page.current.load(this.props.currentElection,this.props.currentState);
 			}
 		}
-		console.log('update');
+		//console.log('update');
 	}
 	
 	
@@ -43,7 +42,7 @@ export default class Middle extends Component {
     	{data=>(
     		<>
 			<Grid container direction="row" alignItems="center">
-			{this.props.currentElection.type=='inspection'?
+			{this.props.currentElection.type==='inspection'?
 			<BookIcon style={{marginRight:3, color:'grey'}}/>
 			:<HowToVoteIcon style={{marginRight:3, color:'grey'}}/>
 			}

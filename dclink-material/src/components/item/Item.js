@@ -118,6 +118,8 @@ export default class Item extends Component {
 	 }
 	 
 	 minView(item){
+		if(item.link === '') return null;
+		
 		 return <DataContext.Consumer>
 		 {data=>(
 			<>
@@ -141,8 +143,9 @@ export default class Item extends Component {
 		const item = this.props.item;
 	    return <MainContext.Consumer>
 		{state=>(
-			
-		    	<Box  ref={this.item} className="item">
+			<>
+			{state.showResult==='min'&&item.link === ''?null
+		    	:<Box  ref={this.item} className="item" pb={3}>
 		    		{
 		    			state.showResult==='min'?this.minView(item)
 		    			:this.normalView(item)
@@ -150,7 +153,8 @@ export default class Item extends Component {
 		    				
 			    	
 			    </Box>
-		    
+			}
+			</>
 		)}
 	    </MainContext.Consumer>
 	}

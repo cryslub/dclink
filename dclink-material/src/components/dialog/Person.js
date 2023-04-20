@@ -22,15 +22,20 @@ import IconButton from '@material-ui/core/IconButton';
 import Divider from '@material-ui/core/Divider';
 
 
+
 import StarIcon from '@material-ui/icons/Star';
 import BookIcon from '@material-ui/icons/Book';
 import ErrorIcon from '@material-ui/icons/Error';
 import StarsIcon from '@material-ui/icons/Stars';
+import InfoIcon from '@material-ui/icons/Info';
+
 import EmojiEventsIcon from '@material-ui/icons/EmojiEvents';
 import DirectionsRunIcon from '@material-ui/icons/DirectionsRun';
 import PolicyIcon from '@material-ui/icons/Policy';
 
+import PersonInfo from '../PersonInfo.js';
 
+import PopoverContainer from '../PopoverContainer.js'
 
 import Party from '../Party.js';
 import YouTubeLink from '../YouTubeLink.js';
@@ -215,32 +220,71 @@ class Person extends Component {
 
 	}
 	
+
+	ifCouncil(candidate){
+		return (candidate.type==='5' || candidate.type==='6' || candidate.type==='8'|| candidate.type==='9'|| candidate.type==='10')
+	}
+
 	election(candidate,i){
 		
+//		console.log(candidate)
 		 const { classes } = this.props;
+		 const birth = candidate.birth
+		 if(birth){
+			if(birth.length===8){
+				candidate.birth = birth.substring(0,4) + "."+birth.substring(4,6)+ "."+birth.substring(6)
+			}
+		}
 		return <>
-			{i>0?<Divider  />:null}
-			<ListItem className={classes.listItem}>
+				{i>0?<Divider  />:null}
+				<ListItem className={classes.listItem} >
 
-			<ListItemText primary={
-					<Grid container alignItems="center">
-					{candidate.result==='당선'?
-					<Box><StarIcon  className={classes.star} /></Box>
-					:<Box ml={2}></Box>		
-					}
-					{candidate.electionName}
-					{
-						candidate.link===''?null
-						:<YouTubeLink fontSize="small" link={candidate.link} />  
-					}
-					</Grid>} 
-					secondary={<Box ml={2}>
-						{candidate.txt} <Party party={candidate.party}/> {candidate.result} 
-					</Box>} 
-					/>	
-			</ListItem>
-				
-		
+				<ListItemText primary={
+						<Grid container alignItems="center">
+						{candidate.result==='당선'?
+						<Box><StarIcon  className={classes.star} /></Box>
+						:<Box ml={2}></Box>		
+						}
+						{candidate.electionName}
+						{
+							this.ifCouncil(candidate)?
+							<Typography component="span" variant="caption" style={{padding:2,marginTop:2}}>{Util.typeMap[candidate.type]}</Typography>
+							:null
+						}
+						{
+				      		candidate.birth?<>
+
+							<PopoverContainer
+								type="info"
+								handler={(open)=>{
+									return <IconButton aria-label="settings">
+										<InfoIcon fontSize="small"/>
+									</IconButton>
+								}}
+								data = {candidate}	
+								
+							/>
+
+							</>
+				      		:null
+				      	}
+						{
+							candidate.link===''?null
+							:<YouTubeLink fontSize="small" link={candidate.link} />  
+						}
+						</Grid>} 
+						secondary={<Box ml={2}>
+							<Typography component="span" style={{paddingRight:2}}>{candidate.txt} </Typography>
+							{
+								candidate.type==='5' || candidate.type==='6'|| candidate.type==='10'?
+								<Typography component="span"  variant="caption" style={{padding:2}}>{Util.getWardName(candidate,candidate.txt)}</Typography>
+								:null
+							}
+							<Party party={candidate.party} electionId={candidate.election}/> {candidate.result} 
+						</Box>} 
+						/>	
+				</ListItem>
+			
 		</>
 	}
 	
@@ -296,13 +340,13 @@ class Person extends Component {
 	
 	awards(person){
 		var runner = null;
-		const candidateLength = person.candidates.filter((candidate)=>{return candidate.result=='당선' || candidate.result=='낙선' || candidate.result=='사퇴' }).length;
+		const candidateLength = person.candidates.filter((candidate)=>{return candidate.result==='당선' || candidate.result==='낙선' || candidate.result==='사퇴' }).length;
 		if(candidateLength>=5){
 			runner =  <Chip label="꾸준출마자" icon={<DirectionsRunIcon  style={{color: 'white'}}/>}  color="primary"
-					style={{backgroundColor: 'gold'}}/>
+					style={{backgroundColor: 'gold',marginRight:2}}/>
 		}else if(candidateLength>=4){
 			runner = <Chip label="꾸준출마자" icon={<DirectionsRunIcon  style={{color: 'white'}}/>}  color="primary"
-				style={{backgroundColor: 'silver'}}/>			
+				style={{backgroundColor: 'silver',marginRight:2}}/>			
 		}
 
 			  
@@ -310,10 +354,10 @@ class Person extends Component {
 		const max = Math.max(...Object.values(person.inspectionCount));
 		if(max>=19){
 			inspection = <Chip label="프로국감러" icon={<PolicyIcon  style={{color: 'white'}}/>}  color="primary"
-			style={{backgroundColor: 'gold'}}/>
+			style={{backgroundColor: 'gold',marginRight:2}}/>
 		}else if(max>=13){
 			inspection = <Chip label="프로국감러" icon={<PolicyIcon  style={{color: 'white'}}/>}  color="primary"
-			style={{backgroundColor: 'silver'}}/>			
+			style={{backgroundColor: 'silver',marginRight:2}}/>			
 		}
 
 		
@@ -353,15 +397,13 @@ class Person extends Component {
 	    		</Grid>
 	    		<Box mt={1}>
 		    		<Paper>
-			    		<List>
 			 			{	person.candidates===undefined?null
-			 				:<>{
+			 				:<List>{
 				   	 			person.candidates.map((candidate,i)=>{
 				   	 				return self.election(candidate,i);
 				   	 			})
-			   	 			}</>
-			 			}
-			 			</List>
+			   	 			}</List>
+			 			}			 			
 		 			</Paper>
 	 			</Box>
 	 			{

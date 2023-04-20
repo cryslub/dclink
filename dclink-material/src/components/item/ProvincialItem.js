@@ -1,27 +1,39 @@
 import React from 'react';
 
-import { ResponsiveBar } from '@nivo/bar'
 
 
 import ReactEcharts from 'echarts-for-react';
 
-
 import {withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
+import Divider from '@material-ui/core/Divider';
+
 import IconButton  from '@material-ui/core/IconButton';
-import Popover from '@material-ui/core/Popover';
 import Tooltip from '@material-ui/core/Tooltip';
+import Grid from '@material-ui/core/Grid';
 
 
 import DescriptionIcon from '@material-ui/icons/Description';
+
+import { ResponsiveWaffle  } from '@nivo/waffle'
+
+
 
 import ProvincialCandidate from '../ProvincialCandidate.js';
 import Item from './Item.js';
 import ExtraCharts from './ExtraCharts.js';
 
-import PersonAvatar from '../PersonAvatar.js';
 
+import BarChart from './BarChart.js';
+import Ward from './Ward.js';
+import ParliamentChart from './ParliamentChart.js'
+
+
+import Doughnut from '../chart/Doughnut.js';
+
+
+import PopoverContainer from '../PopoverContainer.js'
 
 import {DataContext} from '../../DataContext.js';
 import {MainContext} from '../../MainContext.js';
@@ -29,15 +41,82 @@ import {MainContext} from '../../MainContext.js';
 
 import Util from '../../Util.js';
 
-const useStyles = (theme) => ({
+const useStyles =  (theme) =>({
+   
 	 popover: {
 		    pointerEvents: 'none',
 		  },
-		  paper: {
-		    padding: theme.spacing(1),
-		  },
+	paper: {
+		padding: theme.spacing(1),
+	},
+	bar :{
+		height:6,	
+		marginBottom: 10,
+		marginTop:-10
+	}
 	
-	});
+});
+
+const	wardName = (name) => {
+	if(name===undefined) return ''
+	if(name==='선거구') return ''
+	if(name.length>6) return name.replace('선거구','')
+	return name
+//	var matches = name.match(/(\d+)/);
+//	if(matches)
+//		return matches[0]+"선거구"
+//	else return "1선거구"
+}
+	
+
+const Metro = (props)=>{
+
+	const item = props.item
+
+	return <>
+		{
+			Object.keys(item.metroWards).length>0?
+			<Candidates title="광역의원" wards={item.metroWards} wardName={wardName}/>:null
+		}
+	</>
+}
+
+
+const Basic = (props)=>{
+
+	const item = props.item
+
+	return <Candidates title="기초의원" wards={item.basicWards} wardName={wardName}/>
+}
+
+
+const Candidates = (props)=>{
+
+	const wards = props.wards
+	const wardName = props.wardName
+	const results = props.results
+
+
+	return <DataContext.Consumer>
+		{data=>(
+		<>	
+		{Object.keys(wards).length>0?
+		<Grid item>
+			<Box style={{maxWidth:1500}}>
+				<Box><Typography variant='caption'>{props.title}  </Typography></Box>
+				<Divider/>
+				{Object.keys(wards).map(key=>{
+					const ward = wards[key]
+					return <Ward ward={ward} wardName={wardName} wardKey={key} results={results}/>
+				})}
+			</Box>
+		</Grid>
+		:null
+		}
+		</>
+		)}
+	</DataContext.Consumer>
+}
 
 class ProvincialItem extends Item {
 	
@@ -157,87 +236,65 @@ class ProvincialItem extends Item {
 		
 	
 
-		 const { classes } = this.props;
 		 const echarts = require('echarts');
 		
 		
 		 code = code+"";
-			var arr = code.split(",");
+		var arr = code.split(",");
+		
+		var geoJson = {features: [],type:"FeatureCollection"};
+		
+		
+		arr.forEach(async function(item){
+			try {
+				const json = require("../../json/"+item+".json") 
+
+				geoJson.features.push(json.features[0]);
+			}catch{
+
+			}
+		});
 			
-			 var geoJson = {features: [],type:"FeatureCollection"};
-			 
-			 
-			 arr.forEach(async function(item){
-				 const json = require("../../json/"+item+".json") 
+		echarts.registerMap(code, geoJson);
 
-				 geoJson.features.push(json.features[0]);
-			    });
-			 
-    		echarts.registerMap(code, geoJson);
-
-    		const option={
-    			series:[{
-                    type: 'map',
-                    mapType: code, 
-                    aspectScale:1,
-              
-                    emphasis: {
-                        label: {
-                            show: false
-                        }
-                    },
-                    cursor:'default',
-                    itemStyle: {
-                        normal: {
-                            borderColor: '#373a3c',
-                            areaColor: 'silver',
-                            borderWidth: 1
-                        },
-                        emphasis: {
-                            areaColor: 'grey',
-                            borderWidth: 0
-                        }
-                    }
-                }]
-    		}
+		const option={
+			series:[{
+				type: 'map',
+				mapType: code, 
+				aspectScale:1,
+			
+				emphasis: {
+					label: {
+						show: false
+					}
+				},
+				cursor:'default',
+				itemStyle: {
+					normal: {
+						borderColor: '#373a3c',
+						areaColor: 'silver',
+						borderWidth: 1
+					},
+					emphasis: {
+						areaColor: 'grey',
+						borderWidth: 0
+					}
+				}
+			}]
+		}
 	        
-    	const open = Boolean(this.state.anchorEl);
 		 
 		return <DataContext.Consumer>
-    	{data=>(
-    		<>
-    		<Box
-            aria-owns={open ? 'mouse-over-popover' : undefined}
-            aria-haspopup="true"
-            onMouseEnter={this.handlePopoverOpen}
-            onMouseLeave={this.handlePopoverClose}
-          >
-    		<ReactEcharts option={option} style={{width: '30px', height: '30px',display: 'inline-block'}} className="map"/>
-          </Box>
-		      <Popover
-		        id="mouse-over-popover"
-		        className={classes.popover}
-		        classes={{
-		          paper: classes.paper,
-		        }}
-		        open={open}
-		        anchorEl={this.state.anchorEl}
-		      	anchorOrigin={{
-		    	    vertical: 'center',
-		    	    horizontal: 'right',
-		    	  }}
-		    	  transformOrigin={{
-		    	    vertical: 'center',
-		    	    horizontal: 'left',
-		    	  }}
-		        onClose={this.handlePopoverClose}
-		        disableRestoreFocus
-		      >
-		        <Typography>{this.zoomedMapChart(data,code,geoJson)}</Typography>
-		      </Popover>
-		      </>
-    	  )}
-	  	</DataContext.Consumer>
+		{data=>(
+			<PopoverContainer 
+				type="map"
+				handler={(open)=>{
+					return <ReactEcharts option={option} style={{width: '30px', height: '30px',display: 'inline-block'}} className="map"/>
+				}}
+				data={{data,code,geoJson}}/>
+		)}
+		</DataContext.Consumer>
+		
 	}
 	
 	 
@@ -271,77 +328,225 @@ class ProvincialItem extends Item {
 		 )}
 	  	</MainContext.Consumer>
 	}
+
+	
+	getCouncilSize = function(total){
+	
+		var width =0,height=0;
+
+		//		if(total<=36){
+		width=Math.sqrt(total);
+		width = Math.trunc(width)+(width-Math.trunc(width)>0?1:0)
+		
+		if(width<10){
+			width =10;
+		}
+		
+		height = Math.trunc(total/width)+1
+		
+		if(height>5){
+			height=5
+			width = Math.trunc(total/height)+1
+			
+			if(window.innerWidth<480 && width>22){
+				while(width>22){
+					height++;
+					width = Math.trunc(total/height)+1
+				}				
+				
+			}
+
+			
+		}
+		
+		
+		
+		return {width:width,height:height};
+		
+	}
 	
 	
-	result(item,context){
+	memberChart(context,candidates){
 		
-		if(item.candidates.length ===0 || item.candidates[0].party===0 || this.props.currentElection?.result!='true') return null; 
+	
+		const data = []
 		
-		var max = 0;
-        item.candidates.forEach(function(candidate){
-        	max+= candidate.rate;
-        });
+		var total=0;
+		Object.keys(candidates).forEach((key)=>{
+			
+			const candidate = candidates[key]
+
+			data.push({
+					
+				id:key,
+				label:context.parties[key].name,
+				value:candidate,
+				color:context.parties[key].color
+			})
+			total+=candidate
+		})
 		
-		const data= { country: "AD"};
-		const keys = [];
-		 item.candidates.forEach(function(candidate){	        	
-	        	if(candidate.txt === '당선' || candidate.txt === '낙선'){
-	        		data[""+candidate.person] = candidate.rate;
-	        		data[candidate.person+"Color"] = context.parties[candidate.party].color;
-	        		data[candidate.person+"Name"] = candidate.personName;
-	        		data[candidate.person+"Percent"] = candidate.rate*100/max;
-	        		data[candidate.person+"Photo"] = candidate.photo;
-	        		
-	        		keys.push(""+candidate.person) 
-	        	}
-	        });
-		 
-		 
+		const CustomCell = ({
+		    position,
+		    size,
+		    x,
+		    y,
+		    color,
+		    fill,
+		    opacity,
+		    borderWidth,
+		    borderColor,
+		    data,
+		    onHover,
+		    onLeave
+		}) => (
+		    <circle
+		        r={size / 2}
+		        cx={x + size / 2}
+		        cy={y + size / 2}
+		        fill={fill || color}
+		        strokeWidth={borderWidth}
+		        stroke={borderColor}
+		        opacity={opacity}
+		        onMouseEnter={onHover}
+		        onMouseMove={onHover}
+		        onMouseLeave={onLeave}
+	
+		    />
+		)
 		
-		return  <div  className="bar">
-			<ResponsiveBar
-				layout="horizontal"
-				data={[data]}
-				colors={({ id, data }) => data[`${id}Color`]} 
-		      	indexBy="country"
-		      	keys={keys}
-				enableLabel={false}
-		    	axisBottom={null}
-				tooltip={({ id, value, data }) => (
-					<>
-						{data[`${id}Photo`]===1?
-						<Box mr={1}><PersonAvatar id={id}/></Box>
-						:null}
-			            <span >
-			                {data[`${id}Name`]} : {Util.number(value)} ({data[`${id}Percent`].toFixed(2)}%)
-			            </span>
-		            </>
-		        )}
+		var tooltip = ({ id, value, data }) => (
+				<>
+		            <span style={{whiteSpace:'nowrap'}}>
+		                {context.parties[id].name} : {Util.number(value)}명
+		            </span>
+	            </>
+	        )
+		var container =  {
+			color:'white',
+			background: 'rgba(0, 0, 0, 0.55)',
+			position:'absolute',
+			"right": "-100%",
+			"transform": "translateX(calc(100% + 25px))",
+			fontSize:11,
+			borderRadius: "3px"
+		}
+		
+		if(window.innerWidth<480){
+			container = {
+            	color:'white',
+                background: 'rgba(0, 0, 0, 0.55)',
+                "position": "absolute",
+                "right": "100%",
+                "transform": "translateX(100%)",
+                "marginTop": 0,
+                fontSize:11,
+    			borderRadius: "3px"
+            }
+            tooltip = ({ id, value, data }) => (
+				<>
+		            <span style={{whiteSpace:'nowrap'}}>
+		                {context.parties[id].name} <br/> {Util.number(value)}명
+		            </span>
+	            </>
+	        )
+		}
+		
+		const size = this.getCouncilSize(total);
+		return  <div style={{width:((size.width*15)+10)+'px',height:((size.height*15)+10)+'px'}}>
+			<ResponsiveWaffle
+		        data={data}
+		        total={size.width*size.height}
+		        rows={size.height}
+		        columns={size.width}
+		        fillDirection="top"
+		        padding={2}
+		        margin={{ top: 0, right: 0, bottom: 0, left: 0 }}
+		        emptyColor="#ffffff"
+		        emptyOpacity={0}
+				colors={{ datum: 'color' }}
+		        borderColor={{ from: 'color', modifiers: [ [ 'darker', '0' ] ] }}
+		        
+				tooltip={tooltip}
 				theme={{
 					tooltip: {
-						container: {
-							color:'white',
-							background: 'rgba(0, 0, 0, 0.55)',
-							fontSize:11,
-							borderRadius: "3px"
-						}
-	            }
-	        }}
+						container: container
+					}
+				}}
+				cellComponent={CustomCell} 
 		    />
 	    </div>
 	}
+
+	
+	council(item){
+		return <MainContext.Consumer>
+		{state=>(
+			<DataContext.Consumer>
+			{data=>(
+				<>
+				{state.currentElection.type!='by'&&Object.keys(item.councils).length>0?
+				<Grid item>						
+					<Box >
+
+							<Box ><Typography variant='caption'>{item.type}의회 결과 </Typography></Box>
+							<Divider/>
+							<Box style={{textAlign: '-webkit-center'}}>
+								<Typography variant='caption'>총원 {Object.keys(item.councils).map((k) => item.councils[k]).reduce((prev, next) => prev + next)}명</Typography>
+								<Doughnut results={Object.keys(item.councils).map(key=>{return{party:key,count:item.councils[key]}})} style={{width:'60px',height:'60px',marginTop:'-1px'}} 
+													countKey="count" idKey="party" context={data} unit="명" />
+							</Box>
+					</Box>
+				</Grid>:null
+				}
+				</>		
+			)}
+			</DataContext.Consumer>
+		)}
+		</MainContext.Consumer>
+	}
 	
 
+	result(item,context){
+		
+		if(item.candidates.length ===0 || item.candidates[0].party===0 || this.props.currentElection?.result!=='true') return null; 
+		
+		return <div  className="bar">
+			<BarChart candidates = {item.candidates} context={context}/>
+		</div>
+	}
+	
 		
 	candidate(candidate,i){
 		return 	<ProvincialCandidate candidate={candidate} key={i}/>;
 	}
 	
-	
-	
 	extra(item){
-		if(item.type=='기초' ||item.type=='광역' )
-			return <ExtraCharts item = {item}/>
+		if(item.type==='기초' ||item.type==='광역' )
+			return <DataContext.Consumer>
+			{data=>(
+	    		<>
+				{
+					item.type==='기초'?<Grid container  spacing={2} style={{paddingBottom:10}}>
+						<Metro item={item}/>
+						<Basic item={item}/>
+						<Candidates title="기초비례" wards={item.rateWards} wardName={(key)=>('')} results={item.rates}/>
+						<Candidates title="교육의원" wards={item.eduWards} wardName={wardName}/>
+						{this.council(item)}
+					</Grid>:null
+				}
+				{
+					item.type==='광역'?<Grid container  spacing={2} style={{paddingBottom:10}}>
+						<Metro item={item}/>
+						<Candidates title="광역비례" wards={item.rateWards} wardName={(key)=>('')}  results={item.rates}/>
+						{this.council(item)}
+
+					</Grid>:null
+				}
+					
+				</>
+			  )}
+		  	</DataContext.Consumer>
 		return null;
 	}
 	

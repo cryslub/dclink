@@ -14,7 +14,6 @@ import ListIcon from '@material-ui/icons/List';
 import Link from '@material-ui/core/Link';
 import Tooltip from '@material-ui/core/Tooltip';
 import Hidden from '@material-ui/core/Hidden';
-import Box from '@material-ui/core/Box';
 
 
 
@@ -228,7 +227,7 @@ class Header extends Component {
 								</IconButton >
 					         </Tooltip>
 							 {
-								 data.currentElection.type=='inspection'||data.currentState.name==='통계'?null
+								 data.currentElection.type==='inspection'||data.currentState.name==='통계'?null
 								:<Tooltip title="목차">
 									<IconButton  color="inherit" onClick={()=>this.props.toggleContents(true)}>
 										<ListIcon/>

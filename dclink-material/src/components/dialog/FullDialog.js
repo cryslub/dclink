@@ -7,6 +7,9 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import Slide from '@material-ui/core/Slide';
+import Box from '@material-ui/core/Box';
+
+
 
 import CloseIcon from '@material-ui/icons/Close';
 
@@ -88,17 +91,19 @@ class FullDialog extends Component {
 		 
 		return  <MainContext.Consumer>
 		{state=>(
-				<Dialog fullScreen open={this.props.open} onClose={this.handleClose} TransitionComponent={Transition}>
-		        <AppBar className={classes.appBar} elevation={0}>
-		        <Toolbar>
-		          <IconButton edge="start" color="inherit" onClick={this.handleClose} aria-label="close">
-		            <CloseIcon />
-		          </IconButton>
-		          {
-		          	this.props.title
-		          }
-		        </Toolbar>
-		      </AppBar>
+			<Dialog fullScreen open={this.props.open} onClose={this.handleClose} TransitionComponent={Transition}>
+				<Box  >
+					<AppBar  className={classes.appBar} elevation={0}>
+					<Toolbar>
+					<IconButton edge="start" color="inherit" onClick={this.handleClose} aria-label="close">
+						<CloseIcon />
+					</IconButton>
+					{
+						this.props.title
+					}
+					</Toolbar>
+				</AppBar>
+			  </Box>
 		      <main className={classes.content}>
 		        <div className={classes.toolbar} />
 			     {this.props.children}						

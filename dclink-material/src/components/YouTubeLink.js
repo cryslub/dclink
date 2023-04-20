@@ -5,8 +5,6 @@ import IconButton from '@material-ui/core/IconButton';
 
 import YouTubeIcon from '@material-ui/icons/YouTube';
 
-import Util from '../Util.js';
-
 
 import {DataContext} from '../DataContext.js';
 

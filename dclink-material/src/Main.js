@@ -5,13 +5,14 @@ import { withStyles } from '@material-ui/core/styles';
 
 import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import Popover from '@material-ui/core/Popover';
 
-
+import Typography from '@material-ui/core/Typography';
+import Box from '@material-ui/core/Box';
+import ReactEcharts from 'echarts-for-react';
 
 import {
-	  BrowserRouter as Router,
-	  Switch,
-	  Route
+	  BrowserRouter as Router
 } from "react-router-dom";
 
 import ResponsiveDrawer from './components/ResponsiveDrawer.js';
@@ -20,12 +21,15 @@ import ResponsiveDrawer from './components/ResponsiveDrawer.js';
 
 import Middle from './components/Middle.js';
 import PersonModal from './components/dialog/PersonModal.js';
+
+import InfoModal from './components/dialog/InfoModal.js';
 import YoutubeModal from './components/dialog/YoutubeModal.js';
 
 import ZoneModal from './components/dialog/ZoneModal.js';
 
 import SearchDialog from './components/dialog/SearchDialog.js';
 
+import PersonInfo from './components/PersonInfo.js';
 
 
 
@@ -47,6 +51,39 @@ const useStyles = (theme) => ({
 		  },
 	})
 
+const MainPopover = (props)=>{
+	const type = props.type;
+
+	return  <MainContext.Consumer>
+	{state=>(
+		<DataContext.Consumer>
+		{data=>(
+		<Popover
+			id="mouse-over-popover"
+			style={{
+				pointerEvents: 'none',
+			}}
+			open={state.popover[type]}
+			anchorEl={state.anchor[type]}
+			anchorOrigin={{
+				vertical: 'top',
+				horizontal: 'right',
+			}}
+			transformOrigin={{
+				vertical: 'bottom',
+				horizontal: 'left',
+			}}
+			onClose={()=>data.closePopover(type)}
+			disableRestoreFocus
+		>
+			{props.children}
+		</Popover>
+		)}
+		</DataContext.Consumer>
+	)}
+	</MainContext.Consumer>
+}
+
 
 class Main extends Component {
 	
@@ -62,29 +99,42 @@ class Main extends Component {
 					zone:false,
 					loading:false,
 					search:false,
-					youtube:false
+					youtube:false,
+					info:false
+				},
+				popover:{
+					info:false,
+					map:false
+				},
+				anchor:{
+					info:null,
+					map:null
 				},
 				showResult:'full',
 				loading:true,
-				open:false,
+				anchorEl:null,
 				history:{},
 				searchName:'',
 				openElections:false,
 				electionMap:{},
-				stateMap:{}
-
+				stateMap:{},
+				popOverData:{}
 		}
 		
 		this.middle = React.createRef();
 		this.person = React.createRef();
+		this.info = React.createRef();
 		this.zone = React.createRef();
 		this.youtube = React.createRef();
 
 		this.data = {
 				history:this.history,
+				showInfo:this.showInfo,
 				zoneHistory:this.zoneHistory,
 				setLoading:this.setLoading,
 				play:this.play,
+				openPopover:this.openPopover,
+				closePopover:this.closePopover,
 				items:{},
 				currentElection:{},
 				currentState:{}
@@ -141,11 +191,12 @@ class Main extends Component {
 	}
 
 	
+
 	async componentDidMount() {
 		
 		this.getParty();
 		this.getZone();
-		
+
 		const elections  = await DataService.getElection();
 		
 		const electionMap = Util.hash(elections,'id')
@@ -192,10 +243,18 @@ class Main extends Component {
 		this.setState({modal:{person:true}})
 	}
 
-	play = (link)=>{
-		if(link =='') return
+	
+	showInfo =  (candidate)=>{
 
-		if(link!='open')
+		this.info.current.setCandidate(candidate);
+				
+		this.setState({modal:{info:true}})
+	}
+
+	play = (link)=>{
+		if(link ==='') return
+
+		if(link!=='open')
 			this.youtube.current.play(link)
 		this.setState({modal:{youtube:true}})
 
@@ -211,6 +270,14 @@ class Main extends Component {
 
 	}
 
+	openPopover = (type,event,data)=>{
+		this.setState({anchor:{[type]:event.currentTarget},popoverData:data,popover:{[type]:true}})
+	}
+
+	closePopover = (type)=>{
+		this.setState({anchor:{[type]:null},popover:{[type]:false}})
+
+	}
 	
 	closeModal = (type) => {
 		this.setState({modal:{[type]:false}})
@@ -236,7 +303,7 @@ class Main extends Component {
 	selectState = (election,state) =>{
 		this.selectElection(election)
 		
-		if(this.state.currentState == state){
+		if(this.state.currentState === state){
 			this.setLoading(false);
 		}
 		this.setState({currentState:state})
@@ -245,6 +312,115 @@ class Main extends Component {
 	}
 	
 	
+	handlePopoverOpen = (event) => {
+		this.setState({anchorEl:event.currentTarget})
+	};
+
+	handlePopoverClose = () => {
+		this.setState({anchorEl:null})
+
+	};
+	
+	
+	zoomedMapChart(data){
+
+		if(data===undefined) return null;
+
+
+		const context =  this.data;
+		const code = data.code;
+
+		if(code===undefined) return null;
+
+		const geoJson = data.geoJson;
+		var parent = code.substring(0,2);
+		  
+    	const parentJson = require(`./json/${parent}.json`) 
+		 
+	        
+        var json = {features: [],type:"FeatureCollection"};
+        json.features[0] = parentJson.features[0];
+        json.features[0].properties.name = 'parent';
+        
+        
+        var option = {
+			    visualMap: {
+			        min: -100000,
+			        max: 600000,
+			        show:false,
+			        calculable: true,
+			        inRange: {
+			            color: ['white','#50a3ba', '#eac736', '#d94e5d']
+			        }
+			    },
+        		 series: [
+	                {
+	                    type: 'map',
+	                    mapType: 'zoomed'+code, 
+	                    aspectScale:1,
+	                    cursor:'default',
+	                    label: {
+	                        normal: {
+	                            show: false
+	                        },
+	                        emphasis: {
+	                            show: false
+	                        }
+	                    },
+	                    data:[
+	                    	{name:'parent',
+	                    	value:-600000,
+	                    	itemStyle:{
+	                    			borderColor:'#f0f0f0',
+	                    			normal:{borderWidth:1,color:'#ffffff'},
+	                    			emphasis:{borderWidth:1,areaColor:'rgba(128, 128, 128, 0)'}
+	                    	},
+	                    	emphasis:{
+	                    		itemStyle:{normal:{color:'#000000'}}}}
+	                    ],
+	                    nameMap: {'parent':'parent'}
+	                }
+	            ]
+	        };
+        
+	        var index = 1;
+	        var arr = code.split(",");
+	        
+	        arr.forEach(function(item){
+		        json.features[index] = geoJson.features[index-1];
+		        json.features[index].properties.name = 'child'+index;
+
+		        var c = item;
+		        if(item.length>5){
+		        	c = item.substring(0,5);
+		        }			        
+		        var zone = context.zones[c];
+		        if(zone===undefined) zone = context.zones[item.substring(0,2)]
+		        
+		        option.series[0].data.push({
+		        	name:'child'+index,
+		        	value:zone.pop,
+		        	itemStyle:{
+			        	normal:{
+			        		borderWidth:0
+						},
+	                    emphasis:{
+	                    	areaColor:'#f04541'
+                        }
+		        	}
+		        });
+		        option.series[0].nameMap['child'+index] = 'child'+index;
+		        
+		        index++;
+	        });
+	        
+	        const echarts = require('echarts');
+	        echarts.registerMap('zoomed'+code, json);
+	        
+	        return <ReactEcharts option={option} style={{width: '300px', height: '280px'}}/>
+	}
+	
+
 	render() {
 		 const { classes } = this.props;
 
@@ -267,6 +443,9 @@ class Main extends Component {
 			        
 			        <SearchDialog open={this.state.modal.search} close={()=>this.closeModal('search')}/>
 			        <PersonModal open={this.state.modal.person} close={()=>this.closeModal('person')} ref={this.person}/>
+			        <InfoModal open={this.state.modal.info} close={()=>this.closeModal('info')} ref={this.info}/>
+
+					
 			        <YoutubeModal open={this.state.modal.youtube} close={()=>this.closeModal('youtube')} ref={this.youtube}/>
 
 			        <DataContext.Consumer>
@@ -275,7 +454,17 @@ class Main extends Component {
 			    	)}
 			    	</DataContext.Consumer>
 			        
-			        
+					<MainPopover type="info">
+						<Box p={2}>
+							<PersonInfo candidate={this.state.popoverData}/>
+						</Box>
+					</MainPopover>
+
+					<MainPopover type="map">
+						<Typography>{this.zoomedMapChart(this.state.popoverData)}</Typography>
+					</MainPopover>
+
+
 			       <Backdrop className={classes.backdrop} open={this.state.modal.loading} >
 				        <CircularProgress color="inherit" />
 				      </Backdrop>

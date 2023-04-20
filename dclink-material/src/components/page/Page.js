@@ -3,10 +3,13 @@ import BaseComponent from '../BaseComponent.js';
 
 
 import DataService from '../../DataService.js';
+import Util from '../../Util.js';
 
+const candidateMap = {};
 
 export default class Page extends BaseComponent {
 	
+
 	constructor(){
 		super();
 		this.unmounted = true;
@@ -80,10 +83,14 @@ export default class Page extends BaseComponent {
 		var total = 0;
 		result.forEach((item)=>{
 			item.candidates = [];
-			item.councils = [];
+			item.councils = {};
     		item.rates = [];
     		item.metros = [];
     		item.mrates = [];
+			item.metroWards = {}
+			item.basicWards = {}
+			item.rateWards = {}
+			item.eduWards = {}
     		
 			items[item.id] = item;
 
@@ -111,9 +118,16 @@ export default class Page extends BaseComponent {
 	//	this.setState({items:items})
 		
     	await this.getCandidate(items,state);
+		if(this.props.currentElection.type === 'provincial' || this.props.currentElection.type === 'by'){
+			await this.getCandidateInfo(items,state);
+			await this.getPromise(state)
+		}
+		if(this.props.currentElection.type === 'presidential' ){			
+			await this.makeCandidate(items,state,"1","metroWards")
+		}
 		
 		data.setLoading(false);
-      
+		
 
 	}
 	
@@ -123,8 +137,9 @@ export default class Page extends BaseComponent {
 
 		const result = await DataService.getCandidate(state.id);
 //		const items = this.state.items;
-		const candidateMap = {};
+	
 		result.forEach((candidate)=>{
+			candidate.promises = []
 			if(items[candidate.item] !== undefined)
 				items[candidate.item].candidates.push(candidate)
 			candidate.subs = [];
@@ -144,7 +159,7 @@ export default class Page extends BaseComponent {
 		
 		
 		await this.getSub(state,candidateMap);
-		await this.getCouncil(state,items);
+//		await this.getCouncil(state,items);
 
 		this.setState({items:items})
 		this.setState({candidateMap:candidateMap})
@@ -187,6 +202,81 @@ export default class Page extends BaseComponent {
 	}
 	
 	
+	checkWards(wards,name){
+		if(wards[name] === undefined){
+			wards[name] = []
+		}
+	}
+
+	async getCandidateInfo(items,state){
+
+		await this.makeCandidate(items,state,"5","metroWards")
+		await this.makeCandidate(items,state,"6","basicWards")
+		await this.makeCandidate(items,state,"8","rateWards")
+		await this.makeCandidate(items,state,"9","rateWards")
+		await this.makeCandidate(items,state,"10","eduWards")
+
+	}
+
+	async getPromise(state){
+		const result = await DataService.getPromise(state.id);
+		result.forEach(promise=>{
+			const candidate = candidateMap[promise.candidate]
+			if(candidate){
+				candidate.promises.push(promise);
+			}
+		})
+		
+	}
+
+	async makeCandidate(items,state,type,wardsKey){
+
+		const self = this;
+
+		let metroItem 
+		Object.keys(items).forEach(key=>{
+			const item = items[key]
+			if(item.type==='광역') metroItem = item
+		})
+
+		const result = await DataService.getCandidateInfo(type,state.id);
+		result.forEach(function(candidate) {
+			let item = items[candidate.item]
+			if(item===undefined) item=metroItem;
+			if(item===undefined) return;
+			const wards = item[wardsKey]
+			const ward = Util.getWardName(candidate,item.name)
+			self.checkWards(wards,ward);
+			wards[ward].push(candidate);
+			//items[candidate.item].metroCandidates.push(candidate)
+
+			if(type==='5' || type==='8' ){
+				self.pushCouncil(metroItem,candidate)
+			}else if(type!=='10' ){
+				self.pushCouncil(item,candidate)
+			}
+		})
+
+		if(type==='8' || type==='9' ){
+			let list = await DataService.getResult(type,state.id);
+			list.forEach(function(result) {
+				let item = items[result.item]
+				if(item===undefined) item=metroItem;
+				if(item===undefined) return;
+				item.rates.push(result);
+			})	
+		}
+	}
+
+	pushCouncil(item,candidate){
+		if(candidate.result==='당선'){
+			if(item.councils[candidate.party]==undefined){
+				item.councils[candidate.party] = 0
+			}
+			item.councils[candidate.party]++;
+		}
+	}
+
 	async componentDidMount(){
 		this.unmounted = false;
 		

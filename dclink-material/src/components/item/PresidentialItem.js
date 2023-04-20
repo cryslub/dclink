@@ -13,10 +13,8 @@ import Tooltip from '@material-ui/core/Tooltip';
 
 import PersonIcon from '@material-ui/icons/Person';
 import StarIcon from '@material-ui/icons/Star';
-import YouTubeIcon from '@material-ui/icons/YouTube';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import ArrowRightIcon from '@material-ui/icons/ArrowRight';
-import NavigateNextIcon from '@material-ui/icons/NavigateNext';
+import InfoIcon from '@material-ui/icons/Info';
+
 
 import Item from './Item.js';
 import Party from '../Party.js';
@@ -26,10 +24,15 @@ import SmallPersonCard from '../SmallPersonCard.js';
 import PersonAvatar from '../PersonAvatar.js';
 
 
+
+import PersonInfo from '../PersonInfo.js';
+
+import PopoverContainer from '../PopoverContainer.js'
+
+
 import {MainContext} from '../../MainContext.js';
 import {DataContext} from '../../DataContext.js';
 
-import Util from '../../Util.js';
 
 import Logo from '../Logo.js'
 
@@ -38,6 +41,11 @@ import Logo from '../Logo.js'
 export default class PresidentialItem extends Item {
 	
 	title(item){
+
+		let candidate
+		const key = Object.keys(item.metroWards)[0]
+		if(key) candidate = item.metroWards[key][0]
+
 		return <MainContext.Consumer>
 		{state=>(
 			<DataContext.Consumer>
@@ -54,11 +62,27 @@ export default class PresidentialItem extends Item {
 						<Typography  variant={'h6'} component="span">{item.personName}</Typography>
 					</Box>
 					<Box mr={1} component="span">{item.party!==0?this.party(item.party):null}</Box>
-					{item.history>1?<Tooltip title={<>{item.photo==1?<PersonAvatar id={item.person}/>:null}인물이력</>}>
-						<IconButton aria-label="settings"  onClick={()=>data.history(item.person)}>
+					{item.history>1?<Tooltip title={<>{item.photo===1?<PersonAvatar id={item.person}/>:null}인물이력</>}>
+						<IconButton aria-label="settings"  onClick={()=>data.history(item)}>
 					          	<PersonIcon fontSize="small"/>
 					    </IconButton>
 					  </Tooltip>:null}
+					{
+						candidate?<>
+
+						<PopoverContainer 
+							type="info"
+							handler={(open)=>{
+								return <IconButton aria-label="settings">
+									<InfoIcon fontSize="small"/>
+								</IconButton>
+							}}
+							data = {candidate}	
+						/>
+
+						</>
+						:null
+					}
 			  	</>
 			)}
 		    </DataContext.Consumer>

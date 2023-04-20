@@ -471,7 +471,7 @@ class StaticsItem extends Item {
 			    	<Grid container spacing={1}>
 			  		{
 			  			Object.keys(results).map((party, value)=>{
-			  				if(party==5) return null;
+			  				if(party===5) return null;
 				  			return <Grid item>
 				  				<Chip label={data.parties[party].name}  size="small" 
 				  					style={{'color':data.parties[party].textColor,'backgroundColor': data.parties[party].color}}

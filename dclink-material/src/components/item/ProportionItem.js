@@ -8,7 +8,6 @@ import Grid from '@material-ui/core/Grid';
 
 import Item from './Item.js';
 import Party from '../Party.js';
-import PersonIcon from '../PersonIcon.js';
 import Candidate from '../Candidate.js';
 import SmallPersonCard from '../SmallPersonCard.js';
 

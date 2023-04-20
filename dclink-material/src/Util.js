@@ -43,7 +43,7 @@
 	   var height = window.outerHeight;
 		var width = window.innerWidth;
 		
-		console.log(width+','+height)
+		//console.log(width+','+height)
 
 		if(width>=960 ) {
 			width = width-402;		
@@ -81,7 +81,23 @@
 	   	return history;
 	},
 	
+	getWardName(candidate,itemName){
+		let ward = candidate.ward.replace(candidate.district,"").replace(candidate.state,"").replace("교육의원","");
+		if(itemName!==''&&itemName!=null){
+			var arr = itemName.split(' ');
+			const key = arr[arr.length-1];
+			ward = ward.replace(key+'시',"").replace(key+'군',"").replace(key+'구',"")
+		}
 
+		return ward;
+	},	
+	typeMap : {
+		"5":"광역의원",
+		"6":"기초의원",
+		"8":"광역비례",
+		"9":"기초비례",
+		"10":"교육의원"
+	  }
 
 }
  

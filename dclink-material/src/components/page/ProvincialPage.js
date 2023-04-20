@@ -197,10 +197,10 @@ export default class ProvincialPage extends Page {
 				  			const item = items[keyName];
 				  			
 							  const ref = React.createRef();
-							if(data.items[keyName]!=undefined)
+							if(data.items[keyName]!==undefined)
 								data.items[keyName].ref = ref;
 								
-				  			if(item.name==='' && item.title===''&& item.party==0) return null;
+				  			if(item.name==='' && item.title===''&& item.party===0) return null;
 				  			
 				  			if(currentState.name==='비례') return 	<ProportionItem item={item} key={keyIndex} index={keyIndex} ref={ref}/>
 				  			else if(currentState.name==='통계') return 	<StaticsItem item={item} key={keyIndex} statics={self.state.statics} context={data}/>
@@ -236,7 +236,7 @@ export default class ProvincialPage extends Page {
 		var isStatics = false;
 		Object.keys(items).forEach((key)=>{
 			const item = items[key];
-			if(item.type==='기초') isBasic = true
+			if(item.type==='기초') if(item.candidates.length>0) isBasic = true
 			if(item.type==='광역') isMetro = true
 			if(item.type==='광역득표') {
 				isStatics = true
@@ -258,7 +258,7 @@ export default class ProvincialPage extends Page {
 			<DataContext.Consumer>
 	    	{data=>(
 	    		<>
-	    		{state.showResult==='full' && this.state.currentState.name!=='비례' && this.props.currentElection.type!=='inspection' && this.props.currentElection.result=='true'?
+	    		{state.showResult==='full' && this.state.currentState.name!=='비례' && this.props.currentElection.type!=='inspection' && this.props.currentElection.result==='true'?
 	    		<Grid container>
 	    			<Grid item>
 	    			<Box mb={1}><Typography variant="h6"  >{isBasic?<span>{isStatics?'광역':'기초'} 후보 및 비례득표</span>:<span>후보득표</span>} 통계</Typography></Box>
@@ -291,7 +291,7 @@ export default class ProvincialPage extends Page {
 	      		
 	      	}
 	      	{
-	      		this.statics(items)
+	      		//this.statics(items)
 	      	}
 	    </>
 	}

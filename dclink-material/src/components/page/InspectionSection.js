@@ -30,7 +30,6 @@ import {DataContext} from '../../DataContext.js';
 
 import PersonIcon from '../PersonIcon.js';
 
-import Util from '../../Util.js';
 
 
 export default class InspectionSection extends Component {
@@ -86,7 +85,7 @@ export default class InspectionSection extends Component {
 												item.candidates.map((member,i)=>{
 													return <Grid item>
 														<PersonIcon member={member} text={data.parties[member.party].name+' '+member.personName} 
-															onClick={()=>data.history(member.person)} button="인물이력"/>
+															onClick={()=>data.history(member)} button="인물이력"/>
 														</Grid>
 												})
 											}

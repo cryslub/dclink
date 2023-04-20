@@ -1,6 +1,4 @@
-import React, { Component } from 'react';
-
-import {withRouter } from "react-router-dom";
+import React  from 'react';
 
 
 import Typography from '@material-ui/core/Typography';
@@ -66,11 +64,15 @@ class PersonModal extends PersonBase {
 	}
 	
 	
-	async getHistory(person){
+	async getHistory(candidate){
 		
+		let result = []
+		if(candidate.person){
 		
-		
-		const result = await DataService.getHistory(person);
+			result = await DataService.getHistory(candidate.person);
+		}else{
+			result = await DataService.getInfoHistory(candidate.id );
+		}
 		const history = this.makeHistory(result);
 			
 			
@@ -85,11 +87,13 @@ class PersonModal extends PersonBase {
 		this.makeInspection(result);
 	}
 	
-	async history(person){
+	async history(candidate){
 		
 		
-		await this.getHistory(person);
-		await this.getInspection(person);	
+		await this.getHistory(candidate);
+		if(candidate.person){
+			await this.getInspection(candidate.person);	
+		}
 		
 	}
 

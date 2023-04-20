@@ -20,7 +20,7 @@ export default class ByPage extends Page {
 				
 				const item = items[keyName];
 				const ref = React.createRef();
-				if(data.items[keyName]!=undefined)
+				if(data.items[keyName]!==undefined)
 					data.items[keyName].ref = ref;
 				return <ProvincialItem item={item} key={keyIndex} currentElection={self.props.currentElection} ref={ref}/>
 			})}

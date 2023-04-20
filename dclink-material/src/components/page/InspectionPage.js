@@ -94,7 +94,7 @@ export default class InspectionPage extends ProvincialPage {
 							const text = (member.txt===''?'위원':member.txt)+' '+data.parties[member.party].name+' '+member.personName;
 							return  <Grid item>
 								<PersonIcon member={member} text={text} 
-										onClick={()=>data.history(member.person)} button="인물이력"/>
+										onClick={()=>data.history(member)} button="인물이력"/>
 							</Grid>
 					
 						})

@@ -1,4 +1,4 @@
-import React, { Component } from 'react'; 
+import React  from 'react'; 
 
 import Box from '@material-ui/core/Box';
 import Drawer from '@material-ui/core/Drawer';
@@ -32,14 +32,14 @@ import {DataContext} from '../DataContext.js';
 				  			
                     const item = data.items[keyName];
                     let text=  item.name
-                    if(data.currentElection.type=='presidential'){
+                    if(data.currentElection.type==='presidential'){
                         text = item.personName
                     } 
                     if(data.currentState.name==='비례'){
                         text = data.parties[item.party].name
                     }
 
-                    if(text=="") text = item.title
+                    if(text==="") text = item.title
 
                     return <ListItem button key={keyName} onClick={()=>scrollTo(item)}>
                         <ListItemText primary={text} />

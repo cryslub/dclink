@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import { makeStyles, useTheme } from '@material-ui/core/styles';
@@ -35,10 +35,6 @@ import BookIcon from '@material-ui/icons/Book';
 import AssessmentIcon from '@material-ui/icons/Assessment';
 import PieChartIcon from '@material-ui/icons/PieChart';
 import FaceIcon from '@material-ui/icons/Face';
-
-
-import WebIcon from '@material-ui/icons/Web';
-import WebAssetIcon from '@material-ui/icons/WebAsset';
 
 
 
@@ -81,7 +77,7 @@ const useStyles = makeStyles((theme) => ({
   },
   content: {
     flexGrow: 1,
-    padding: theme.spacing(3),
+    padding: theme.spacing(3)
   },
   toggleContainer:{
 	  margin:theme.spacing(1),
@@ -98,7 +94,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function ResponsiveDrawer(props) {
-  const { window } = props;
   const classes = useStyles();
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -132,6 +127,10 @@ function ResponsiveDrawer(props) {
 	  }
   }
   
+  useEffect(function mount() {
+   
+  });
+
   const drawer = (
 		 <>
 		 
@@ -234,6 +233,8 @@ function ResponsiveDrawer(props) {
 
   
   const container = window !== undefined ? () => window().document.body : undefined;
+  const scrollbarVisible = window !== undefined ? window.visualViewport.width < window.innerWidth:false;
+  console.log(scrollbarVisible);
 
   return (
     <div className={classes.root}>
@@ -243,7 +244,6 @@ function ResponsiveDrawer(props) {
         {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
         <Hidden mdUp >
           <Drawer
-            container={container}
             variant="temporary"
             anchor={theme.direction === 'rtl' ? 'right' : 'left'}
             open={mobileOpen}
@@ -273,7 +273,7 @@ function ResponsiveDrawer(props) {
         
 					<ContentsDrawer open={contentsOpen} toggleContents={toggleContents}/>
       </nav>
-      <main className={classes.content}>
+      <main className={classes.content} >
         <div className={classes.toolbar} />
         	{props.children}
       </main>

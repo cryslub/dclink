@@ -1,30 +1,19 @@
 import React, { Component } from 'react';
 import ReactPlayer from 'react-player'
 
-import {withRouter } from "react-router-dom";
-
 
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
 
 
-import DataService from '../../DataService.js';
-
-import Person from './Person.js';
-import ResponsiveDialog from './ResponsiveDialog.js';
-
-import PersonBase from './PersonBase.js';
 import Dialog from '@material-ui/core/Dialog';
 import Hidden from '@material-ui/core/Hidden';
-import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
 
 import Slide from '@material-ui/core/Slide';
 
 import TvOffIcon from '@material-ui/icons/TvOff';
-
-
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -35,7 +24,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 const Content = (props)=>{
 	const url = props.url
 	return <>
-		{url==''?<>
+		{url===''?<>
 			<Grid item style={{paddingRight:2}} xs={12}>
 				<Box p={2}>
 				<center>

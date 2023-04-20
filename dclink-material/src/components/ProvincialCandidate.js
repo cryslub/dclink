@@ -1,35 +1,13 @@
 import React from 'react';
-import NumberFormat from 'react-number-format';
-
 
 import { withStyles } from '@material-ui/core/styles';
 
-import CardContent from '@material-ui/core/CardContent';
-import Box from '@material-ui/core/Box';
-
-
-import Divider from '@material-ui/core/Divider';
 
 import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
-
-import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import CardActions from '@material-ui/core/CardActions';
-import CardMedia from '@material-ui/core/CardMedia';
-import IconButton from '@material-ui/core/IconButton';
-
 import Candidate from './Candidate.js';
-import PersonIconC from './PersonIcon.js';
 import PersonCard from './PersonCard.js';
-import PersonAvatar from './PersonAvatar.js';
 import SmallPersonCard from './SmallPersonCard.js';
 
-
-
-import YouTubeLink from './YouTubeLink.js';
-import Tooltip from '@material-ui/core/Tooltip';
-import PersonIcon from '@material-ui/icons/Person';
 
 import {MainContext} from '../MainContext.js';
 import {DataContext} from '../DataContext.js';

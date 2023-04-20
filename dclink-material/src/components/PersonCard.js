@@ -5,26 +5,28 @@ import {withStyles } from '@material-ui/core/styles';
 
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
-import CardActions from '@material-ui/core/CardActions';
-import CardMedia from '@material-ui/core/CardMedia';
 
-import IconButton from '@material-ui/core/IconButton';
 import Box from '@material-ui/core/Box';
+import Link from '@material-ui/core/Link';
+
 import Tooltip from '@material-ui/core/Tooltip';
+import IconButton from '@material-ui/core/IconButton';
+
+
 
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 
-import PersonIcon from '@material-ui/icons/Person';
 import StarIcon from '@material-ui/icons/Star';
-import SentimentVerySatisfiedIcon from '@material-ui/icons/SentimentVerySatisfied';
-import SentimentDissatisfiedIcon from '@material-ui/icons/SentimentDissatisfied';
+import InfoIcon from '@material-ui/icons/Info';
 
 
 
 import Party from './Party.js';
 import YouTubeLink from './YouTubeLink.js';
 import PersonAvatar from './PersonAvatar.js';
+
+import PopoverContainer from './PopoverContainer.js'
 
 import {DataContext} from '../DataContext.js';
 import {MainContext} from '../MainContext.js';
@@ -58,7 +60,6 @@ const useStyles = (theme) => ({
 
 class PersonCard extends Component {
 	
-	
 	onError(){
 		
 	}
@@ -83,13 +84,20 @@ class PersonCard extends Component {
 		    	 	style={{paddingLeft:"1px"}}
 		    	 
 					avatar={
-		    			 <>{type==='provincial'?<Logo candidate={candidate} classes={classes}/>:null}</>
+		    			 <>{type==='provincial'?<Logo candidate={candidate} style={{marginLeft:15}}/>:null}</>
 		    		}
 					title={
-		    			 <Grid container >				    	
+		    			 <Grid container style={{alignItems:'center'}}>				    	
 							{candidate.txt==='당선'?<StarIcon style={{color:'gold'}}></StarIcon>:null}
-							<Typography mb={0} component="span" variant={variant} >{type==='presidential'?candidate.txt:candidate.personName}</Typography>
-							{type==='provincial'?<Box ml={1}><Party party={candidate.party}/></Box>:null}
+							{candidate.history>1&&type!=='presidential'?
+								<Tooltip title={<>{candidate.photo===1?<PersonAvatar id={candidate.person}/>:null}인물이력</>}>
+									<Link  size="large" color="primary" onClick={()=>data.history(candidate)} 
+										style={{cursor:'pointer'}}>
+										<Typography mb={0} component="span" variant={variant} >{candidate.personName}</Typography>
+									</Link>
+								</Tooltip>
+							:<Typography mb={0} component="span" variant={variant} >{type==='presidential'?candidate.txt:candidate.personName}</Typography>}
+							{type==='provincial'?<Box ml={1}><Party party={candidate.party} /></Box>:null}
 						</Grid>
 					}
 		    	 	subheader={
@@ -110,14 +118,28 @@ class PersonCard extends Component {
 						</>
 					}
 					action={
-		    			 <Box mt={1} ml={1} className={classes.action}>			  
+		    			 <Box mt={1} ml={1} className={classes.action}>	
 						{
-				      		candidate.history>1&&type!=='presidential'?
-				      			<Tooltip title={<>{candidate.photo==1?<PersonAvatar id={candidate.person}/>:null}인물이력</>}>
-								    <IconButton aria-label="settings" onClick={()=>data.history(candidate.person)}>
-						          		<PersonIcon fontSize="small"/>
-						          	</IconButton>
-					          	</Tooltip>
+				      		candidate.birth?<>
+							{candidate.promises?.length>0?
+							<Tooltip title="선관위 정보">
+								<IconButton  onClick={()=>data.showInfo(candidate)} >
+									<InfoIcon fontSize="small"/>
+								</IconButton>
+							</Tooltip>
+							:<PopoverContainer
+								type="info"
+								handler={(open)=>{
+									return <IconButton >
+										<InfoIcon fontSize="small"/>
+									</IconButton>
+								}}
+								data = {candidate}	
+								
+							/>
+							}
+
+							</>
 				      		:null
 				      	}
 						{

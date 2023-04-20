@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import {Link,withRouter } from "react-router-dom";
+import {withRouter } from "react-router-dom";
 
 import {withStyles } from '@material-ui/core/styles';
 
@@ -38,10 +38,10 @@ class PersonIcon extends Component {
 				
 		return <DataContext.Consumer >
 		    {data=>(
-		    	<Tooltip title={<>{member.photo==1?<PersonAvatar id={member.person}/>:null}인물이력</>}>
+		    	<Tooltip title={<>{member.photo===1?<PersonAvatar id={member.person}/>:null}인물이력</>}>
 		    		<Chip label={member.personName}  size="small"  icon={<Person style={{'color':data.parties[member.party].textColor}}/>}
  					style={{'color':data.parties[member.party].textColor,'backgroundColor': data.parties[member.party].color}}
-		    		onClick={()=>data.history(member.person)}
+		    		onClick={()=>data.history(member)}
 		    		 onDelete={link===''||link===undefined?null:()=>Util.link(link)}
 		    		deleteIcon={link===''||link===undefined?null:<Tooltip title="듣기" placement="top"><YouTubeIcon style={{'color':data.parties[member.party].textColor}}/></Tooltip>}
 		    	></Chip>		    	
