@@ -93,6 +93,12 @@ public class DataController {
     }
 
 	
+	@RequestMapping("/itemsAll.do")
+	public @ResponseBody List<Item> itemsAll() {
+		List<Item> ret = mainMapper.getItems();
+		
+        return ret;
+    }
 	
 	@RequestMapping("/item/state/{state}")
 	public @ResponseBody List<Item> stateItems(@PathVariable Integer state) {
@@ -115,6 +121,12 @@ public class DataController {
         return ret;
     }
 
+	@RequestMapping("/candidatesAll.do")
+	public @ResponseBody List<Candidate> candidatesAll( ) {
+		List<Candidate> ret = mainMapper.getCandidates();
+		
+        return ret;
+    }
 	
 	
 	@RequestMapping("/candidate/state/{state}")
@@ -131,6 +143,13 @@ public class DataController {
 		
         return ret;
     }
+	
+	@RequestMapping("/candidate/info.do")
+	public @ResponseBody List<CandidateInfo> candidateInfoAll( ) {
+		List<CandidateInfo> ret = mainMapper.getCandidateInfos();
+		
+        return ret;
+    }
 
 	@RequestMapping("/candidate/promise/{state}")
 	public @ResponseBody List<Promise> promise(@PathVariable Integer state) {
@@ -139,6 +158,13 @@ public class DataController {
         return ret;
     }
 
+	@RequestMapping("/candidate/promise.do")
+	public @ResponseBody List<Promise> promiseAll( ) {
+		List<Promise> ret = mainMapper.getPromises();
+		
+        return ret;
+    }
+	
 	
 	@RequestMapping("/result/{state}/{type}")
 	public @ResponseBody List<CandidateInfo> result(@PathVariable Integer state,@PathVariable String type) {
@@ -147,7 +173,12 @@ public class DataController {
         return ret;
     }
 
-	
+	@RequestMapping("/result.do")
+	public @ResponseBody List<CandidateInfo> resultAll() {
+		List<CandidateInfo> ret = mainMapper.getResults();
+		
+        return ret;
+    }	
 	
 	@RequestMapping("/councils.do")
 	public @ResponseBody List<Council> councils(@RequestParam("state") int state) {
@@ -224,6 +255,13 @@ public class DataController {
         return ret;
     }
 	
+	@RequestMapping("/subsAll.do")
+	public @ResponseBody List<Sub> subsAll() {
+		List<Sub> ret = mainMapper.getSubsAll();
+		
+        return ret;
+    }
+
 	
 	@RequestMapping("/sub/state/{state}")
 	public @ResponseBody List<Sub> stateSubs(@PathVariable Integer state) {

@@ -7,6 +7,8 @@ public class Person {
 	String name;
 	boolean photo;
 	String txt;
+	String chinese;
+	String birth;
 	
 	public int getId() {
 		return id;
@@ -31,6 +33,18 @@ public class Person {
 	}
 	public void setTxt(String txt) {
 		this.txt = txt;
+	}
+	public String getChinese() {
+		return chinese;
+	}
+	public void setChinese(String chinese) {
+		this.chinese = chinese;
+	}
+	public String getBirth() {
+		return birth;
+	}
+	public void setBirth(String birth) {
+		this.birth = birth;
 	}
 	
 	

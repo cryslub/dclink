@@ -28,7 +28,7 @@ import com.dclink.pojo.Zone;
 
 @Mapper
 public interface MainMapper {
-	@Select("select id,name,type,result from election order by date desc")
+	@Select("select * from election order by date desc")
 	public List<Election> getAllElection();
 
 	@Select("select id,name from state where election = #{election}")
@@ -48,6 +48,9 @@ public interface MainMapper {
 			+ "			 left outer join person p  on a.person = p.id\r\n"
 			+ "			 where state=#{state} ")
 	public List<Item> getItem( @Param("state") int state);
+	
+	@Select("select * from item")
+	public List<Item> getItems();
 
 //	@Select("select id,person,item,link,party,txt,count,rate, "
 //			+ " (select count(*) from candidate c,item i  where c.item = i.id and c.person=a.person and i.type !='소속위원') + (select count(*) from item where person=a.person )  as history"
@@ -62,6 +65,10 @@ public interface MainMapper {
 			+ "		where a.state=#{state} \r\n"
 			+ "		order by a.id")
 	public List<Candidate> getCandidate( @Param("state") int state);
+	
+	@Select("select * from candidate")
+	public List<Candidate> getCandidates();
+	
 
 	@Select("select id,item,party,count,type "
 			+ " from council a where state=#{state}  order by id")
@@ -101,7 +108,7 @@ public interface MainMapper {
 
 
 	
-	@Select("select id,name,photo,txt from person")
+	@Select("select * from person")
 	public List<Person> getPerson();
 
 	
@@ -110,7 +117,7 @@ public interface MainMapper {
 	@Select("select id,name,color,textColor from party")
 	public List<Party> getParty();
 
-	@Select("select id,name,code,pop from zone")	
+	@Select("select * from zone")	
 	public List<Zone> getZone();
 
 		
@@ -742,4 +749,19 @@ public List<Promise> getPromise(@Param("state") int state);
 			+ "AND (HISTORY <=1 OR HISTORY IS NULL)\r\n"
 			+ "")
 	public void matchCandidateInfoHistory1();
+
+	@Select("select * from candidateInfo")
+	public List<CandidateInfo> getCandidateInfos();
+
+	@Select("select * from promise")
+	public List<Promise> getPromises();
+	
+	@Select("select * from result")
+	public List<CandidateInfo> getResults();
+
+	@Select("select * from sub")
+	public List<Sub> getSubsAll();
+	
+	
+	
 }

@@ -5,6 +5,7 @@ public class Zone {
 	int id;
 	String code;
 	String name;
+	String fullName;
 	int pop;
 	
 	public int getId() {
@@ -31,6 +32,12 @@ public class Zone {
 	}
 	public void setPop(int pop) {
 		this.pop = pop;
+	}
+	public String getFullName() {
+		return fullName;
+	}
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
 	}
 	
 	

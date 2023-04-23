@@ -7,6 +7,7 @@ public class Election {
 	String name;
 	String type;
 	String result;
+	String date;
 	
 	public int getId() {
 		return id;
@@ -31,6 +32,12 @@ public class Election {
 	}
 	public void setResult(String result) {
 		this.result = result;
+	}
+	public String getDate() {
+		return date;
+	}
+	public void setDate(String date) {
+		this.date = date;
 	}
 	
 	
