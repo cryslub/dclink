@@ -1,7 +1,7 @@
 const axios = require('axios');
 
 var mongoose = require('mongoose');
-mongoose.connect('mongodb+srv://cryslub:vBDekv4sUriQdbhh@cluster0.yna1nar.mongodb.net/dclink?retryWrites=true&w=majority');
+mongoose.connect('mongodb+srv://cryslub:<password>@cluster0.yna1nar.mongodb.net/dclink?retryWrites=true&w=majority');
 
 var electionSchema = mongoose.Schema({
     name: String,
