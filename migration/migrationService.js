@@ -1,7 +1,9 @@
 const axios = require('axios');
 
+var env = require("./env.js");
+
 var mongoose = require('mongoose');
-mongoose.connect('mongodb+srv://cryslub:<password>@cluster0.yna1nar.mongodb.net/dclink?retryWrites=true&w=majority');
+mongoose.connect('mongodb+srv://cryslub:'+env.password+'@cluster0.yna1nar.mongodb.net/dclink?retryWrites=true&w=majority');
 
 var electionSchema = mongoose.Schema({
     name: String,
@@ -24,7 +26,8 @@ var electionSchema = mongoose.Schema({
     name: String,
     color: String,
     textColor: String,
-    infos : Map
+    infos : Array,
+    infobak: Map 
 });
 
  var Party = mongoose.model("Party", partySchema);
@@ -421,6 +424,28 @@ const migrationService = {
         }    
 
         console.log("zones")
+    }
+    ,
+    adjustPartyInfo:async()=>{
+        var parties = await Party.find({})
+        for(party of parties){
+            const infos = []
+           
+            for (const key of party.infobak.keys()) {
+//                console.log(party.infos.get(key))
+
+                infos.push({
+                    eleciton_id :key,
+                    election : key,
+                    link : party.infobak.get(key)
+                })
+            }
+
+            console.log(infos)
+            await Party.updateOne({_id:party._id},{
+                infos:infos
+            })
+        }
     }
 
 }

@@ -7,6 +7,12 @@ var migrationService = require('./migrationService.js');
 app.get('/', function(req, res){
    res.send("Hello world!");
 });
+app.get('/adjustPartyInfo', async function(req, res){
+
+   await migrationService.adjustPartyInfo();
+   res.send("Hello world!");
+
+});
 
 app.get('/migrate', async function(req, res){
 
