@@ -2,7 +2,9 @@
 import * as actionTypes from './actions';
 
 export const initialState = {
-    state: {}
+    state: {},
+    link: '',
+    playerOpen: false
 };
 
 // ==============================|| CUSTOMIZATION REDUCER ||============================== //
@@ -13,6 +15,16 @@ const contextReducer = (state = initialState, action) => {
             return {
                 ...state,
                 state: action.state
+            };
+        case actionTypes.PLAY:
+            return {
+                ...state,
+                link: action.link
+            };
+        case actionTypes.TOGGLE_PLAYER:
+            return {
+                ...state,
+                playerOpen: action.playerOpen
             };
         default:
             return state;

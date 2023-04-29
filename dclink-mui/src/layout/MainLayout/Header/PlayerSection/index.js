@@ -1,37 +1,31 @@
-import { useState, useRef, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-
+import React, { useState, useRef, useEffect } from 'react';
+import ReactPlayer from 'react-player';
+import { useDispatch, useSelector } from 'react-redux';
+import { TOGGLE_PLAYER } from 'store/actions';
 // material-ui
 import { useTheme } from '@mui/material/styles';
 import {
-    Avatar,
     Box,
-    Button,
-    ButtonBase,
-    CardActions,
-    Chip,
-    ClickAwayListener,
-    Divider,
     Grid,
-    Paper,
-    Popper,
-    Stack,
-    TextField,
     Typography,
-    useMediaQuery
+    useMediaQuery,
+    ButtonBase,
+    Avatar,
+    Popper,
+    ClickAwayListener,
+    Paper,
+    Dialog,
+    DialogContent,
+    Slide
 } from '@mui/material';
-
-// third-party
-import PerfectScrollbar from 'react-perfect-scrollbar';
+import TvOffIcon from '@mui/icons-material/TvOff';
 
 // project imports
 import MainCard from 'ui-component/cards/MainCard';
-import Transitions from 'ui-component/extended/Transitions';
-import NotificationList from './NotificationList';
 
 // assets
 import { IconBrandYoutube } from '@tabler/icons';
-
+import Transitions from 'ui-component/extended/Transitions';
 // notification status options
 const status = [
     {
@@ -52,10 +46,41 @@ const status = [
     }
 ];
 
+const Transition = React.forwardRef(function Transition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />;
+});
+
 // ==============================|| NOTIFICATION ||============================== //
 
-const NotificationSection = () => {
+const Content = (props) => {
+    const context = useSelector((state) => state.context);
+
+    const link = context.link;
+    return (
+        <>
+            {link === '' ? (
+                <>
+                    <Grid item xs={12}>
+                        <Box p={2}>
+                            <center>
+                                <TvOffIcon style={{ marginRight: 2 }} />
+                                <br />
+                                <Typography variant="caption">재생중인 영상 없음</Typography>
+                            </center>
+                        </Box>
+                    </Grid>
+                </>
+            ) : (
+                <ReactPlayer width="100%" height="100%" url={link} controls={false} playing={true} />
+            )}
+        </>
+    );
+};
+
+const PlayerSection = () => {
     const theme = useTheme();
+    const dispatch = useDispatch();
+
     const matchesXs = useMediaQuery(theme.breakpoints.down('md'));
 
     const [open, setOpen] = useState(false);
@@ -66,7 +91,7 @@ const NotificationSection = () => {
     const anchorRef = useRef(null);
 
     const handleToggle = () => {
-        setOpen((prevOpen) => !prevOpen);
+        dispatch({ type: TOGGLE_PLAYER, playerOpen: true });
     };
 
     const handleClose = (event) => {
@@ -123,99 +148,8 @@ const NotificationSection = () => {
                     </Avatar>
                 </ButtonBase>
             </Box>
-            <Popper
-                placement={matchesXs ? 'bottom' : 'bottom-end'}
-                open={open}
-                anchorEl={anchorRef.current}
-                role={undefined}
-                transition
-                disablePortal
-                popperOptions={{
-                    modifiers: [
-                        {
-                            name: 'offset',
-                            options: {
-                                offset: [matchesXs ? 5 : 0, 20]
-                            }
-                        }
-                    ]
-                }}
-            >
-                {({ TransitionProps }) => (
-                    <Transitions position={matchesXs ? 'top' : 'top-right'} in={open} {...TransitionProps}>
-                        <Paper>
-                            <ClickAwayListener onClickAway={handleClose}>
-                                <MainCard border={false} elevation={16} content={false} boxShadow shadow={theme.shadows[16]}>
-                                    <Grid container direction="column" spacing={2}>
-                                        <Grid item xs={12}>
-                                            <Grid container alignItems="center" justifyContent="space-between" sx={{ pt: 2, px: 2 }}>
-                                                <Grid item>
-                                                    <Stack direction="row" spacing={2}>
-                                                        <Typography variant="subtitle1">All Notification</Typography>
-                                                        <Chip
-                                                            size="small"
-                                                            label="01"
-                                                            sx={{
-                                                                color: theme.palette.background.default,
-                                                                bgcolor: theme.palette.warning.dark
-                                                            }}
-                                                        />
-                                                    </Stack>
-                                                </Grid>
-                                                <Grid item>
-                                                    <Typography component={Link} to="#" variant="subtitle2" color="primary">
-                                                        Mark as all read
-                                                    </Typography>
-                                                </Grid>
-                                            </Grid>
-                                        </Grid>
-                                        <Grid item xs={12}>
-                                            <PerfectScrollbar
-                                                style={{ height: '100%', maxHeight: 'calc(100vh - 205px)', overflowX: 'hidden' }}
-                                            >
-                                                <Grid container direction="column" spacing={2}>
-                                                    <Grid item xs={12}>
-                                                        <Box sx={{ px: 2, pt: 0.25 }}>
-                                                            <TextField
-                                                                id="outlined-select-currency-native"
-                                                                select
-                                                                fullWidth
-                                                                value={value}
-                                                                onChange={handleChange}
-                                                                SelectProps={{
-                                                                    native: true
-                                                                }}
-                                                            >
-                                                                {status.map((option) => (
-                                                                    <option key={option.value} value={option.value}>
-                                                                        {option.label}
-                                                                    </option>
-                                                                ))}
-                                                            </TextField>
-                                                        </Box>
-                                                    </Grid>
-                                                    <Grid item xs={12} p={0}>
-                                                        <Divider sx={{ my: 0 }} />
-                                                    </Grid>
-                                                </Grid>
-                                                <NotificationList />
-                                            </PerfectScrollbar>
-                                        </Grid>
-                                    </Grid>
-                                    <Divider />
-                                    <CardActions sx={{ p: 1.25, justifyContent: 'center' }}>
-                                        <Button size="small" disableElevation>
-                                            View All
-                                        </Button>
-                                    </CardActions>
-                                </MainCard>
-                            </ClickAwayListener>
-                        </Paper>
-                    </Transitions>
-                )}
-            </Popper>
         </>
     );
 };
 
-export default NotificationSection;
+export default PlayerSection;

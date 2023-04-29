@@ -15,7 +15,7 @@ import config from './config';
 
 import * as Realm from 'realm-web';
 import { ApolloClient, ApolloProvider, HttpLink, InMemoryCache } from '@apollo/client';
-
+import gql from 'graphql-tag';
 // ==============================|| REACT DOM RENDER  ||============================== //
 
 // Connect to your MongoDB Realm app
@@ -41,6 +41,13 @@ const graphqlUri = 'https://us-west-2.aws.realm.mongodb.com/api/client/v2.0/app/
 // const graphqlUri = `https://us-east-1.aws.stitch.mongodb.com/api/client/v2.0/app/${APP_ID}/graphql`
 // const graphqlUri = `https://eu-west-1.aws.stitch.mongodb.com/api/client/v2.0/app/${APP_ID}/graphql`
 // const graphqlUri = `https://ap-southeast-1.aws.stitch.mongodb.com/api/client/v2.0/app/${APP_ID}/graphql`
+
+const typeDefs = gql`
+    extend type Candidate {
+        item_id: ObjectId
+    }
+`;
+
 const client = new ApolloClient({
     link: new HttpLink({
         uri: graphqlUri,
@@ -50,7 +57,8 @@ const client = new ApolloClient({
             return fetch(uri, options);
         }
     }),
-    cache: new InMemoryCache()
+    cache: new InMemoryCache(),
+    typeDefs
 });
 
 const container = document.getElementById('root');

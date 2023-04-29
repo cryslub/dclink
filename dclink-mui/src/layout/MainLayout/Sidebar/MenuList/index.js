@@ -1,6 +1,6 @@
 // material-ui
 import { useState } from 'react';
-import { Typography } from '@mui/material';
+import { Typography, Backdrop } from '@mui/material';
 import { useDispatch } from 'react-redux';
 
 // project imports
@@ -18,9 +18,12 @@ import { useNavigate, useParams } from 'react-router-dom';
 // project imports
 import { MENU_OPEN } from 'store/actions';
 
+import CircularProgress from '@mui/material/CircularProgress';
+
 // ==============================|| SIDEBAR MENU LIST ||============================== //
 
 const MenuList = () => {
+    const [loading, setLoading] = useState(true);
     const dispatch = useDispatch();
 
     const ALL_ELECTIONS = gql`
@@ -77,13 +80,15 @@ const MenuList = () => {
             data?.states.forEach((state) => {
                 //        console.log(state);=
                 var election = state.election;
-                electionMap[election._id].push({
-                    id: state._id,
-                    title: state.name,
-                    type: 'item',
-                    state: state,
-                    url: '/' + election.name.replace(/\s/g, '') + '/' + state.name
-                });
+                if (state.name != '통계') {
+                    electionMap[election._id].push({
+                        id: state._id,
+                        title: state.name,
+                        type: 'item',
+                        state: state,
+                        url: '/' + election.name.replace(/\s/g, '') + '/' + state.name
+                    });
+                }
             });
 
             //    console.log(electionMap);
@@ -131,6 +136,8 @@ const MenuList = () => {
             setMenuItem({
                 items: [electionMenu, inspectionMenu]
             });
+
+            setLoading(false);
         }
     });
 
@@ -151,7 +158,16 @@ const MenuList = () => {
         }
     });
 
-    return <>{navItems}</>;
+    console.log('loading - ' + loading);
+    return (
+        <>
+            {navItems}
+            <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} open={loading}>
+                {' '}
+                <CircularProgress color="inherit" />
+            </Backdrop>
+        </>
+    );
 };
 
 export default MenuList;

@@ -85,7 +85,7 @@ const ElectionProvincial = (prop) => {
             setItemData(data.items);
             //fetchMoreData();
             setItems(data.items.slice(0, pageSize));
-            setOffset(pageSize);
+            setOffset(offset + pageSize);
         }
     });
 
@@ -119,7 +119,6 @@ const ElectionProvincial = (prop) => {
                 loader={<h4>Loading...</h4>}
             >
                 {items.map((item) => {
-                    if (item.link == '') return null;
                     return <ProvincialCard item={item} key={item._id} />;
                 })}
             </InfiniteScroll>
