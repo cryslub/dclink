@@ -1506,3 +1506,5 @@ migration/node_modules/whatwg-url/lib/URLSearchParams-impl.js
 migration/node_modules/whatwg-url/lib/URLSearchParams.js
 migration/node_modules/whatwg-url/lib/utils.js
 migration/node_modules/whatwg-url/lib/VoidFunction.js
+migration/env.js
+migration/env.js

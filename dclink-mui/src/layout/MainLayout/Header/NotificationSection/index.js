@@ -66,7 +66,7 @@ const NotificationSection = () => {
     const anchorRef = useRef(null);
 
     const handleToggle = () => {
-        setOpen((prevOpen) => !prevOpen);
+        setOpen(true);
     };
 
     const handleClose = (event) => {

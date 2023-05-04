@@ -1,4 +1,4 @@
-import { Tooltip, Button } from '@mui/material';
+import { Tooltip, IconButton } from '@mui/material';
 import { IconBrandYoutube } from '@tabler/icons';
 
 import { useTheme } from '@mui/material/styles';
@@ -10,7 +10,6 @@ const YoutubeLink = (prop) => {
     const theme = useTheme();
     const dispatch = useDispatch();
     const link = prop.link;
-    const color = prop.color;
 
     const play = () => {
         dispatch({ type: PLAY, link });
@@ -18,7 +17,7 @@ const YoutubeLink = (prop) => {
 
     return (
         <Tooltip title="듣기">
-            <Button size="small" sx={{ minWidth: 0, marginLeft: 0 }} onClick={play}>
+            <IconButton size="small" onClick={play}>
                 <IconBrandYoutube
                     stroke={1.5}
                     size="1.3rem"
@@ -27,7 +26,7 @@ const YoutubeLink = (prop) => {
                         cursor: 'pointer'
                     }}
                 />
-            </Button>
+            </IconButton>
         </Tooltip>
     );
 };

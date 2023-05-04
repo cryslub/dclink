@@ -91,7 +91,15 @@ public class DataController {
 		
         return ret;
     }
-
+	
+	@RequestMapping("/presidentialItems.do")
+	public @ResponseBody List<Item> presidentialItems() {
+		List<Item> ret = mainMapper.getPresidentialItems();
+		
+        return ret;
+    }
+	
+	
 	
 	@RequestMapping("/itemsAll.do")
 	public @ResponseBody List<Item> itemsAll() {

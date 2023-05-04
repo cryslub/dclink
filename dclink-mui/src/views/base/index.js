@@ -3,7 +3,8 @@ import { lazy } from 'react';
 
 import { Typography, Stack, Box } from '@mui/material';
 import Loadable from 'ui-component/Loadable';
-const ElectionProvincial = Loadable(lazy(() => import('views/election/provincial')));
+const ElectionView = Loadable(lazy(() => import('views/election')));
+const InpsectionView = Loadable(lazy(() => import('views/inspection')));
 
 import { useSelector } from 'react-redux';
 
@@ -16,7 +17,7 @@ const Base = () => {
     const state = context.state;
     const election = state.election;
 
-    console.log(election);
+    //    console.log(election);
 
     return (
         <>
@@ -26,9 +27,11 @@ const Base = () => {
                 </Box>
             </Stack>
             {election ? (
-                (election.type == 'provincial' || election.type == 'by') && state.name != '비례' && state.name != '통계' ? (
-                    <ElectionProvincial state={state} />
-                ) : null
+                election.type == 'inspection' ? (
+                    <InpsectionView election={election} state={state} />
+                ) : (
+                    <ElectionView election={election} state={state} />
+                )
             ) : null}
         </>
     );

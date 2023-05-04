@@ -8,3 +8,4 @@ export const SET_STATE = '@customization/SET_STATE';
 
 export const PLAY = '@context/PLAY';
 export const TOGGLE_PLAYER = '@context/PLAYER_TOGGLE';
+export const TOGGLE_PERSON_INFO = '@context/TOGGLE_PERSON_INFO';

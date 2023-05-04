@@ -1,21 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import ReactPlayer from 'react-player';
 
-import {
-    Box,
-    Grid,
-    Typography,
-    useMediaQuery,
-    ButtonBase,
-    Avatar,
-    Popper,
-    ClickAwayListener,
-    Paper,
-    Dialog,
-    DialogContent,
-    Slide,
-    Hidden
-} from '@mui/material';
+import { Box, Grid, Typography, Dialog, DialogContent, Slide, Hidden } from '@mui/material';
 import TvOffIcon from '@mui/icons-material/TvOff';
 import { useDispatch, useSelector } from 'react-redux';
 import { TOGGLE_PLAYER } from 'store/actions';
@@ -53,11 +39,11 @@ const YoutubeModal = () => {
     const context = useSelector((state) => state.context);
     const dispatch = useDispatch();
     const playerOpen = context.playerOpen;
-    const handleToggle = () => {
+    const handleClose = () => {
         dispatch({ type: TOGGLE_PLAYER, playerOpen: false });
     };
     return (
-        <Dialog open={playerOpen} onClose={handleToggle} TransitionComponent={Transition} keepMounted>
+        <Dialog open={playerOpen} onClose={handleClose} TransitionComponent={Transition} keepMounted>
             <DialogContent style={{ padding: 0, overflow: 'hidden' }}>
                 <Hidden mdUp>
                     <Grid container justifyContent="center" alignItems="center" style={{ width: '100%', height: 169 }} direction="row">

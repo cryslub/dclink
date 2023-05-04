@@ -7,6 +7,17 @@ var migrationService = require('./migrationService.js');
 app.get('/', function(req, res){
    res.send("Hello world!");
 });
+
+
+
+app.get('/addPresidentialCandidate', async function(req, res){
+
+   await migrationService.addPresidentialCandidate();
+   res.send("Hello world!");
+
+});
+
+
 app.get('/adjustPartyInfo', async function(req, res){
 
    await migrationService.adjustPartyInfo();
@@ -17,17 +28,21 @@ app.get('/adjustPartyInfo', async function(req, res){
 app.get('/migrate', async function(req, res){
 
   // await migrationService.migrateZones();
- //  await migrationService.migrateElections();
- //  await migrationService.migrateStates();
-//   await migrationService.migrateParties();
-//   await migrationService.migratePartySubs();
-//   await migrationService.migratePersons();
-//   await migrationService.migrateItems();
-//   await migrationService.migrateResults();
+/*   await migrationService.migrateElections();
+   await migrationService.migrateStates();
+   await migrationService.migrateParties();
+   await migrationService.migratePartySubs();
+   await migrationService.migratePersons();
+   await migrationService.migrateItems();
+   await migrationService.migrateResults();
    
-//   await migrationService.migrateCandidates();
-//   await migrationService.migrateCandidateInfos();
+   await migrationService.migrateCandidates();
+   await migrationService.migrateCandidateInfos();
    await migrationService.migrateCandidatePromises();
+   */
+   await migrationService.migrateCandidateSubs();
+
+   
    
    res.send("Hello world!");
  });

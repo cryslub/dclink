@@ -40,7 +40,7 @@ const NavCollapse = ({ menu, level }) => {
 
     // menu collapse for sub-levels
     useEffect(() => {
-        setOpen(false);
+        //setOpen(false);
         setSelected(null);
         if (menu.children) {
             menu.children.forEach((item) => {

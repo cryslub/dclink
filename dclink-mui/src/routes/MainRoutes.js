@@ -21,6 +21,7 @@ const SamplePage = Loadable(lazy(() => import('views/sample-page')));
 
 // sample page routing
 const Base = Loadable(lazy(() => import('views/base')));
+const Search = Loadable(lazy(() => import('views/search')));
 
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -32,6 +33,11 @@ const MainRoutes = {
             path: '/',
             element: <Default />
         },
+        {
+            path: '/검색',
+            element: <Search />
+        },
+
         {
             path: ':electionName',
             element: <Base />

@@ -1,5 +1,5 @@
 // material-ui
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Typography, Backdrop } from '@mui/material';
 import { useDispatch } from 'react-redux';
 
@@ -13,18 +13,30 @@ import gql from 'graphql-tag';
 import { IconZoomCheck } from '@tabler/icons';
 
 import HowToVoteOutlinedIcon from '@mui/icons-material/HowToVoteOutlined';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 
 // project imports
 import { MENU_OPEN } from 'store/actions';
 
 import CircularProgress from '@mui/material/CircularProgress';
 
+// third-party
+import PerfectScrollbar from 'react-perfect-scrollbar';
+
 // ==============================|| SIDEBAR MENU LIST ||============================== //
 
 const MenuList = () => {
-    const [loading, setLoading] = useState(true);
+    const [stateMap, setStateMap] = useState({});
+    let { electionName, stateName } = useParams();
+
+    const location = useLocation();
     const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const init = stateMap[decodeURI(location.pathname)];
+        if (init) dispatch({ type: MENU_OPEN, id: init.id, state: init.state });
+    }, [location, dispatch, stateMap]);
 
     const ALL_ELECTIONS = gql`
         query AllElections {
@@ -70,27 +82,39 @@ const MenuList = () => {
     });
     const electionMap = {};
 
-    const navigate = useNavigate();
-    useQuery(ALL_ELECTIONS, {
+    const { loading } = useQuery(ALL_ELECTIONS, {
         onCompleted: (data) => {
+            var init;
+
             data?.elections.forEach((election) => {
                 electionMap[election._id] = [];
             });
-
+            var stateMapTemp = {};
             data?.states.forEach((state) => {
                 //        console.log(state);=
                 var election = state.election;
                 if (state.name != '통계') {
-                    electionMap[election._id].push({
+                    let url = '/' + election.name.replace(/\s/g, '');
+                    if (state.name != '') url += '/' + state.name;
+                    const child = {
                         id: state._id,
                         title: state.name,
                         type: 'item',
                         state: state,
-                        url: '/' + election.name.replace(/\s/g, '') + '/' + state.name
-                    });
+                        url: url
+                    };
+                    electionMap[election._id].push(child);
+                    if (
+                        electionName == election.name.replace(/\s/g, '') &&
+                        (stateName == state.name || election.type == 'by' || election.type == 'presidential')
+                    )
+                        init = child;
+
+                    stateMapTemp[child.url] = child;
                 }
             });
 
+            setStateMap(stateMapTemp);
             //    console.log(electionMap);
 
             data?.elections.forEach((election) => {
@@ -120,8 +144,8 @@ const MenuList = () => {
                 }
             });
 
-            var init = electionMenu.children[0];
-            if (init) {
+            init = init ? init : electionMenu.children[0];
+            if (init && electionName != '검색') {
                 console.log(init);
                 if (init?.type == 'collapse') {
                     init = init.children[0];
@@ -136,14 +160,10 @@ const MenuList = () => {
             setMenuItem({
                 items: [electionMenu, inspectionMenu]
             });
-
-            setLoading(false);
         }
     });
 
-    let { electionName, stateName } = useParams();
-
-    console.log(electionName + ',' + stateName);
+    //    console.log(electionName + ',' + stateName);
 
     const navItems = menuItem.items.map((item) => {
         switch (item.type) {
@@ -158,10 +178,11 @@ const MenuList = () => {
         }
     });
 
-    console.log('loading - ' + loading);
+    //    console.log('loading - ' + loading);
     return (
         <>
             {navItems}
+
             <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} open={loading}>
                 {' '}
                 <CircularProgress color="inherit" />

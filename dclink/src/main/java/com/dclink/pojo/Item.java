@@ -24,6 +24,8 @@ public class Item {
 	String personName;
 	int photo;
 	String result;
+	String date;
+
 	
 	public String getZone() {
 		return zone;
@@ -139,6 +141,12 @@ public class Item {
 	}
 	public void setResult(String result) {
 		this.result = result;
+	}
+	public String getDate() {
+		return date;
+	}
+	public void setDate(String date) {
+		this.date = date;
 	}
 	
 	

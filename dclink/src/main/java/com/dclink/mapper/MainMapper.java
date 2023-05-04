@@ -52,6 +52,12 @@ public interface MainMapper {
 	@Select("select * from item")
 	public List<Item> getItems();
 
+	@Select("select item.*,election.date from item "
+			+ "join election on item.election = election.id "
+			+ "where election.type = 'presidential' ")
+	public List<Item> getPresidentialItems();
+
+	
 //	@Select("select id,person,item,link,party,txt,count,rate, "
 //			+ " (select count(*) from candidate c,item i  where c.item = i.id and c.person=a.person and i.type !='소속위원') + (select count(*) from item where person=a.person )  as history"
 //			+ " from candidate a where state=#{state}  order by id")

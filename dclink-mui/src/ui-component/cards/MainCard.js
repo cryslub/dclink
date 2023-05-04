@@ -3,7 +3,7 @@ import { forwardRef } from 'react';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
-import { Card, CardContent, CardHeader, Divider, Typography } from '@mui/material';
+import { Card, CardContent, CardHeader, Typography } from '@mui/material';
 
 // constant
 const headerSX = {
@@ -55,7 +55,7 @@ const MainCard = forwardRef(
                 )}
 
                 {/* content & header divider */}
-                {title && <Divider />}
+                {/*title && <Divider />*/}
 
                 {/* card content */}
                 {content && (

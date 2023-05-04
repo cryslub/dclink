@@ -100,7 +100,8 @@ const MenuCard = () => {
                                     border: 'none',
                                     borderColor: theme.palette.primary.main,
                                     background: '#fff',
-                                    marginRight: '12px'
+                                    marginRight: '12px',
+                                    cursor: 'default'
                                 }}
                             >
                                 <FaceOutlinedIcon fontSize="inherit" />

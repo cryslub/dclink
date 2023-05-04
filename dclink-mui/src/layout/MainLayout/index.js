@@ -11,6 +11,8 @@ import Header from './Header';
 import Sidebar from './Sidebar';
 import Customization from '../Customization';
 import YoutubeModal from 'dialog/YoutubeModal';
+import PersonModal from 'dialog/PersonModal';
+import SearchModal from 'dialog/SearchModal';
 
 import navigation from 'menu-items';
 import { drawerWidth } from 'store/constant';
@@ -105,6 +107,8 @@ const MainLayout = () => {
             </Main>
 
             <YoutubeModal />
+            <PersonModal />
+            <SearchModal />
         </Box>
     );
 };

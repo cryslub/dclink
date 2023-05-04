@@ -9,7 +9,8 @@ var electionSchema = mongoose.Schema({
     name: String,
     type: String,
     result: String,
-    date:String
+    date:String,
+    legacyId:Number
  });
  var Election = mongoose.model("Election", electionSchema);
 
@@ -17,7 +18,9 @@ var electionSchema = mongoose.Schema({
  var stateSchema = mongoose.Schema({
     name: String,
     fullName: String,
-    election_id : mongoose.Schema.Types.ObjectId
+    election_id : mongoose.Schema.Types.ObjectId,
+    election : mongoose.Schema.Types.ObjectId,
+    legacyId:Number
  });
  var State = mongoose.model("State", stateSchema);
 
@@ -27,7 +30,7 @@ var electionSchema = mongoose.Schema({
     color: String,
     textColor: String,
     infos : Array,
-    infobak: Map 
+    legacyId:Number
 });
 
  var Party = mongoose.model("Party", partySchema);
@@ -51,6 +54,10 @@ var electionSchema = mongoose.Schema({
     party_id : mongoose.Schema.Types.ObjectId,
     election_id : mongoose.Schema.Types.ObjectId,
     candidate_id : mongoose.Schema.Types.ObjectId,
+    state : mongoose.Schema.Types.ObjectId,
+    party: mongoose.Schema.Types.ObjectId,
+    election : mongoose.Schema.Types.ObjectId,
+    candidate : mongoose.Schema.Types.ObjectId,
     mapCode: String,
     type: String,
     title: String,
@@ -73,6 +80,10 @@ var electionSchema = mongoose.Schema({
     party_id : mongoose.Schema.Types.ObjectId,
     item_id : mongoose.Schema.Types.ObjectId,
     state_id : mongoose.Schema.Types.ObjectId,
+    person : mongoose.Schema.Types.ObjectId,
+    party : mongoose.Schema.Types.ObjectId,
+    item : mongoose.Schema.Types.ObjectId,
+    state : mongoose.Schema.Types.ObjectId,
     votes: Number,
     text : String,
     legacyId:Number,
@@ -98,7 +109,8 @@ var electionSchema = mongoose.Schema({
         order : String,
         historyCount : Number,
         promises : {type:'Array', default :[]}
-    }
+    },
+    subs:Array
  });
 
  var Candidate = mongoose.model("Candidate", candidateSchema);
@@ -139,7 +151,8 @@ const migrationService = {
                 name: election.name,
                 type: election.type,
                 result: election.result,
-                date:election.date
+                date:election.date,
+                legacyId:election.id
             });
 
             await newElection.save();
@@ -158,7 +171,9 @@ const migrationService = {
             var newState = new State({
                 name: state.name,
                 fullName: state.fullName,
-                election_id: electionMap[state.election]._id
+                election_id: electionMap[state.election]._id,
+                election: electionMap[state.election]._id,
+                legacyId:state.id
             });
 
             await newState.save()
@@ -179,7 +194,8 @@ const migrationService = {
                 name: party.name,
                 color: party.color,
                 textColor: party.textColor,
-                infos:{}
+                infos:[],
+                legacyId:party.id
             });
 
             await newParty.save()
@@ -201,7 +217,10 @@ const migrationService = {
             var infos = party.infos;
 
             var election_id = electionMap[sub.election]._id;
-            infos.set(election_id,sub.link)
+            infos.push({
+                election_id:election_id,
+                link:sub.link
+            })
 //            console.log(infos)
              
 
@@ -247,8 +266,7 @@ const migrationService = {
         for(item of items) {
 
             var election = electionMap[item.election];
-            var candidate_id;
-
+  
             if(election.type==='presidential'){
 
             }
@@ -264,7 +282,9 @@ const migrationService = {
                 election_id: election._id,
                 state_id: stateMap[item.state],
                 party_id: partyMap[item.party],
-                candidate_id:candidate_id,
+                election: election._id,
+                state: stateMap[item.state],
+                party: partyMap[item.party],
                 legacyId:item.id,
                 coordinate:{
                     x:item.x,
@@ -297,6 +317,10 @@ const migrationService = {
                 state_id: stateMap[candidate.state],
                 party_id: partyMap[candidate.party],
                 item_id: itemMap[candidate.item],
+                person: personMap[candidate.person],
+                state: stateMap[candidate.state],
+                party: partyMap[candidate.party],
+                item: itemMap[candidate.item],  
                 legacyId : candidate.id
             });
 
@@ -316,9 +340,7 @@ const migrationService = {
 
             var candidate = {
               
-                person_id: personMap[info.person],
-                party_id: partyMap[info.party],
-                item_id: itemMap[info.item],
+
                 info:{
                     necDate : info.date,
                     necType : info.type,
@@ -353,6 +375,13 @@ const migrationService = {
  
 
             if(info.candidate == 0){
+                candidate.person_id= personMap[info.person]
+                candidate.party_id=partyMap[info.party]
+                candidate.item_id= itemMap[info.item]
+                candidate.person= personMap[info.person]
+                candidate.party= partyMap[info.party]
+                candidate.item= itemMap[info.item]
+
                 var newCandidate = new Candidate(candidate);
                 await newCandidate.save()
             }else{
@@ -384,6 +413,27 @@ const migrationService = {
 
         console.log("promises")
     },
+    migrateCandidateSubs:async ()=>{
+        const subs = await httpCall('subsAll')
+
+        for(sub of subs) {
+
+            var candidate = await Candidate.findOne({"legacyId":sub.candidate})
+            candidate.subs.push({
+                title:sub.txt,
+                link : sub.link
+            });
+
+            await Candidate.updateOne({_id:candidate._id},{
+                subs:candidate.subs
+            })
+ 
+
+        }    
+
+        console.log("subs")
+    },
+    
     migrateResults:async ()=>{
         const results = await httpCall('result')
 
@@ -446,6 +496,38 @@ const migrationService = {
                 infos:infos
             })
         }
+    },
+    addPresidentialCandidate:async()=>{
+        const items = await httpCall('presidentialItems')
+
+        for(item of items){
+            const person = await Person.findOne({legacyId:item.person})
+
+            const candidate = await Candidate.findOne(                {
+                "info.necDate":item.date,
+                "info.necType":"1",
+                "info.name":person.name
+            })
+
+           // console.log(candidate)
+
+            if(candidate){
+
+               await Item.updateOne({legacyId:item.id},{
+                    candidate_id : candidate._id,
+                    candidate : candidate._id
+                })
+
+                await Candidate.updateOne({_id:candidate._id},
+                    {
+                        person_id : person._id,
+                        votes: item.code,
+                        text : item.type
+                    }
+                )
+            }
+        }
+
     }
 
 }

@@ -4,7 +4,10 @@ import * as actionTypes from './actions';
 export const initialState = {
     state: {},
     link: '',
-    playerOpen: false
+    person: {},
+    playerOpen: false,
+    personInfoOpen: false,
+    anchorRef: null
 };
 
 // ==============================|| CUSTOMIZATION REDUCER ||============================== //
@@ -25,6 +28,14 @@ const contextReducer = (state = initialState, action) => {
             return {
                 ...state,
                 playerOpen: action.playerOpen
+            };
+        case actionTypes.TOGGLE_PERSON_INFO:
+            console.log(action.personInfoOpen);
+            return {
+                ...state,
+                personInfoOpen: action.personInfoOpen,
+                person: action.person,
+                anchorRef: action.anchorRef
             };
         default:
             return state;
